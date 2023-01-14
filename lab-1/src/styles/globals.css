@@ -1,0 +1,33 @@
+html{
+  background: #0b0a17;
+  color: whitesmoke;
+}
+
+body{
+    margin: 10em;
+}
+
+a{
+    color: #f1f1f1;
+}
+
+h3{
+    color: #f1f1f1;
+}
+
+.item-score{
+    color: #f1f1f1;
+}
+.item-time{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    color: #f1f1f1;
+    margin-right: 20px;
+
+}
+.item-url{
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
