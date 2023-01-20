@@ -1,4 +1,4 @@
-import {useState} from "react";
+import {useEffect, useState} from "react";
 
 interface Item {
     by: string,
@@ -15,25 +15,46 @@ interface Item {
 interface NewsFeedProps {
     itemIds: Array<number>;
     items: Array<Item>;
+
+    increment: number;
 }
 
 
 export async function getStaticProps() {
-    const res = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
-    const itemIds: Array<number> = await res.json();
+
+    let topStoriesRes
+    try{
+        topStoriesRes = await fetch('https://hacker-news.firebaseio.com/v0/topstories.json');
+    }catch (e) {
+        return {props: {itemIds: [], items: []}}
+    }
+
+    const itemIds: Array<number> = await topStoriesRes.json();
     let items: Array<Item> = [];
 
+
     // slice for demo
-    for (let itemId of itemIds.slice(0,50)) {
-        const res = await fetch(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json`);
-        const item: Item = await res.json();
+    for (let itemId of itemIds.slice(0, 50)) {
+        let itemRes
+        try{
+            itemRes = await fetch(`https://hacker-news.firebaseio.com/v0/item/${itemId}.json`);
+            if(itemRes.status !== 200){
+                continue;
+            }
+        }
+        catch (e) {
+            console.log("error fetching item", e)
+            continue
+        }
+        const item: Item = await itemRes.json();
         items.push(item);
     }
 
     return {
         props: {
             itemIds,
-            items
+            items,
+            increment: 5
         }
     }
 
@@ -41,12 +62,69 @@ export async function getStaticProps() {
 
 export default function NewsFeed(props: NewsFeedProps) {
 
+    // cycle through the items, rendering props.increment at a time
+    const [start, setStart] = useState(0);
+    const [end, setEnd] = useState(props.increment);
+
+    // a boolean for whether or not to auto cycle every props.increment seconds
+    const [autoCycle, setAutoCycle] = useState(false);
+
+    // an effect that will auto cycle every props.increment seconds
+    useEffect(() => {
+        if (autoCycle) {
+            const interval = setInterval(() => {
+                next()
+            }, 5000);
+            return () => clearInterval(interval);
+        }
+
+
+    }, [autoCycle, end, start])
+
+    const next = () => {
+        if (end  >= props.items.length) {
+            setStart(0);
+            setEnd(props.increment);
+            return
+        }
+        setStart(start + props.increment);
+        setEnd(end + props.increment);
+    }
+
+    const prev = () => {
+        setStart(start - 5);
+        setEnd(end - 5);
+    }
+
+    const toggleAutoCycle = () => {
+        setAutoCycle(!autoCycle);
+    }
+
+    const items = props.items.slice(start, end);
 
 
     return (
         <div className={"news-feed"}>
+            <div className={"news-feed__header"}>
+                <button
+                    onClick={prev}
+                    disabled={start === 0}
+                >Prev
+                </button>
+                <button
+                    onClick={next}
+                    disabled={end === props.items.length}
+                >Next
+                </button>
+                <button
+                    onClick={toggleAutoCycle}
+                >{autoCycle ? "Stop" : "Start"} Auto Cycle
+                </button>
+
+                <span>{start} / {props.items.length}</span>
+            </div>
             {
-                props.items.map((item) => {
+                items.map((item) => {
                     return <ItemComponent item={item} key={item.id}/>
                 })
             }
@@ -90,14 +168,13 @@ function ItemComponent(props: { item: Item }) {
 }
 
 function getBaseUrl(url: String) {
-    if(!url){
+    if (!url) {
         return "";
     }
-    try{
+    try {
 
         return url.split("/")[2];
-    }
-    catch (e){
+    } catch (e) {
         console.error(e)
     }
 }
