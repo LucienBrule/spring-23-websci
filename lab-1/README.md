@@ -1,6 +1,12 @@
 
 # WebSci Lab-1 
 
+
+[Production / Preview](https://spring-23-websci.vercel.app/)
+
+
+## Requirements:
+
 - [ ] ~~Retrieve news articles from JSON file~~
 - [X] Retrieve news articles from API
 
