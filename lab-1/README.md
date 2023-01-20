@@ -4,6 +4,10 @@
 
 [Production / Preview](https://spring-23-websci.vercel.app/)
 
+## Specs:
+
+[Lab 1 Spec Sheet](specs/specs.md)
+
 
 ## Requirements:
 
@@ -16,11 +20,73 @@
 
 - [X] Consider options such as replacing all 5 articles every 3 seconds, replacing one every 3 seconds, or a different approach
 
+## Methodology
+
+I started by implementing the newsfeed api logic first. 
+you can see an example of this in [demo.sh](demo.sh)
+
+I then broke out the UI into components in [index.tsx](src/pages/index.tsx)
+
+At this point I had a page that would dynamically pull content via XHR request.
+It would pull al the articles. This wasn't the best as the page was super long and the assignment said to only show 5 at a time.
+
+I decided to use a feature of NextJS called Static Site Generation (SSG) to generate the page at build time.
+This would allow me to pull the articles at build time and then only show 5 at a time.
+I pull 50 articles, but this can be changed to up to 200. It just makes the build time longer.
+
+If I had more time, I would have like to progressively enhance the page by hydrating on page scroll.
+
+I then implemented the news ticker logic such that it would cycle through the articles every 5 seconds.
+For this I used a `setInterval` function to call a function that would update the state of the page contained within a react `useEffect` hook.
 
 
+As far as design goes, I like my news sites minimal. In my opinion HackerNews and Reddit have near optimal designs.
+So I used css flexbox to create a list of cards that would display the articles. This allows the page to be responsive and scale to any size.
+By not using bootstrap I also save a lot on my bundle size.
+
+## Stats
+
+### Bundle Size
+```
+Route (pages)                              Size     First Load JS
+┌ ● / (7837 ms)                            821 B          74.3 kB
+├   /_app                                  0 B            73.5 kB
+├ ○ /404                                   181 B          73.7 kB
+└ λ /api/hello                             0 B            73.5 kB
++ First Load JS shared by all              73.9 kB
+  ├ chunks/framework-ad45764ecfcae9e5.js   45.4 kB
+  ├ chunks/main-1227de1dc46e1332.js        27.1 kB
+  ├ chunks/pages/_app-bf55c49910772dbb.js  297 B
+  ├ chunks/webpack-8fa1640cc84ba8fe.js     750 B
+  └ css/1e9850de97c44540.css               380 B
+```
+
+Above you can see my bundle sizes are all under 1Mb.
+
+
+### LightHouse Scores
+
+```
+Performance:                99
+Accessibility:              97
+Best Practices:             100
+SEO:                        82
+PWA:                        N/A
+First Contentful Paint:     900ms
+Time to Interactive:        1200ms
+```
+
+I believe I could improve my SEO score by adding more metadata to the page.
+I also could improve my performance score by adding a service worker and preloading the next page.
+The FCP and TTI scores are pretty good, I could optimize them further by using a CDN and preloading the next page. 
+
+## Conclusion
+
+I am happy with the results of this assignment. I got a chance to use NextJS and learn about SSG.
 
 ---
 
+---
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
