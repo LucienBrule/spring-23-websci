@@ -1,3 +1,20 @@
+
+# WebSci Lab-1 
+
+- [ ] ~~Retrieve news articles from JSON file~~
+- [X] Retrieve news articles from API
+
+- [X] Display 5 articles at a time on the news ticker
+
+- [X] Implement a method for cycling through the articles slowly (no faster than once every 3 seconds)
+
+- [X] Consider options such as replacing all 5 articles every 3 seconds, replacing one every 3 seconds, or a different approach
+
+
+
+
+---
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
