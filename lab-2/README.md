@@ -1,3 +1,52 @@
+# Web Sci Lab 2
+
+## Detailed Description of all the APIs
+
+### 1. OpenWeather API
+
+See IWeatherResponse for the shape of returned data. The API is pretty shoddy, and takes a long time to verify your API key. (big sad)
+
+### 2. api.openai.com
+
+The documentation for the backing api to chat gpt. 
+
+The docs are [here](https://beta.openai.com/docs/api-reference/authentication)
+
+This API requires the use of two headers in every request, 
+a Content-Type Header and an Authorization Header.
+
+The Content-Type Header is always application/json.
+
+The Authorization Header is type Bearer and the tokens are generated from the OpenAI Dashboard.
+
+### 3. APOD
+URL: https://api.nasa.gov/planetary/apod
+
+NASA has a collection of APIS that are free to use. 
+
+One of the most popular ones is "Astronomy Picture of the Day" (APOD).
+
+```bash
+$ curl https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY | jq .
+{
+  "copyright": "Dan Bartlett",
+  "date": "2023-01-27",
+  "explanation": "The current darling of the northern night, Comet C/2022 E3 ZTF is captured in this telescopic image from a dark sky location at June Lake, California. Of course Comet ZTF has been growing brighter in recent days, headed for its closest approach to Earth on February 1.  But this view was recorded on January 23, very close to the time planet Earth crossed the orbital plane of long-period Comet ZTF. The comet's broad, whitish dust tail is still curved and fanned out away from the Sun as Comet ZTF sweeps along its orbit. Due to perspective near the orbital plane crossing, components of the fanned out dust tail appear on both sides of the comet's green tinted coma though, to lend Comet ZTF a visually striking (left) anti-tail. Buffeted by solar activity the comet's narrower ion tail also streams away from the coma diagonally to the right, across the nearly three degree wide field of view.",
+  "hdurl": "https://apod.nasa.gov/apod/image/2301/C2022E3ZTF_2023_01_23_054036PST_DEBartlett.jpg",
+  "media_type": "image",
+  "service_version": "v1",
+  "title": "Comet ZTF: Orbital Plane Crossing",
+  "url": "https://apod.nasa.gov/apod/image/2301/C2022E3ZTF_2023_01_23_054036PST_DEBartlett1024.jpg"
+}
+```
+
+
+---
+
+---
+
+# Running the project
+
 This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next-app`](https://github.com/vercel/next.js/tree/canary/packages/create-next-app).
 
 ## Getting Started
