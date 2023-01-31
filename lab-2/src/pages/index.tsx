@@ -2,7 +2,6 @@ import Head from 'next/head'
 import styles from '@/styles/Home.module.css'
 import {Weather} from "@/components/weather";
 
-
 export default function Home() {
   return (
     <>
@@ -14,7 +13,7 @@ export default function Home() {
       </Head>
       <main className={styles.main}>
         <div className={styles.description}>
-          <h1>Weather For Programmers</h1>
+          <h1>Simple Weather</h1>
         </div>
 
         <div className={styles.center}>
@@ -22,7 +21,7 @@ export default function Home() {
         </div>
 
         <div className={styles.grid}>
-          <h3> Bottom </h3>
+          <h3> By Lucien Brule </h3>
         </div>
       </main>
     </>

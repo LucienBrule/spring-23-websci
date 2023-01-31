@@ -105,3 +105,24 @@ a {
     color-scheme: dark;
   }
 }
+
+.weather-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.weather-item {
+  display: flex;
+  justify-content: space-between;
+  width: 50%;
+  margin-bottom: 10px;
+}
+
+.weather-label {
+  font-weight: bold;
+}
+
+.weather-value {
+  font-style: italic;
+}

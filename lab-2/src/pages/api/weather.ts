@@ -1,12 +1,12 @@
 import type { NextApiRequest, NextApiResponse } from 'next'
 
-const API_KEY = process.env.WEATHER_API_KEY || "75c710a2df835c75e1cfd4c0bb1fde18"
+const API_KEY = process.env.OPENWEATHERMAP_API_KEY
 
 
 
 // @ts-ignore
 const getWeatherByLocation = async (lat, lon) => {
-    const url = `https://api.openweathermap.org/data/2.5/weather?lat=${lat}&lon=${lon}&appid=${API_KEY}`
+    const url = `https://api.openweathermap.org/data/2.5/weather?units=imperial&lat=${lat}&lon=${lon}&appid=${API_KEY}`
     const response = await fetch(url)
     const data = await response.json()
 

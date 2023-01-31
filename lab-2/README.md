@@ -1,5 +1,31 @@
 # Web Sci Lab 2
 
+## Using the weather app
+
+```yarn dev```
+navigate to localhost:3000
+get prompted for you location
+refresh the page
+weather auto loads
+map auto loads
+
+interesting: 
+
+open dev tools,
+
+open the console,
+
+click the three dots in the top right next to the close button,
+
+more tools > sensors
+
+sensors tab opens on the bottom of dev tools
+
+this allows you to spoof you location,
+
+notice how the map updates to reflect new locations.
+
+
 ## Detailed Description of all the APIs
 
 ### 1. OpenWeather API
@@ -39,6 +65,8 @@ $ curl https://api.nasa.gov/planetary/apod?api_key=DEMO_KEY | jq .
   "url": "https://apod.nasa.gov/apod/image/2301/C2022E3ZTF_2023_01_23_054036PST_DEBartlett1024.jpg"
 }
 ```
+
+
 
 
 ---
