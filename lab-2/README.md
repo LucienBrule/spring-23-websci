@@ -2,12 +2,14 @@
 
 ## Using the weather app
 
-```yarn dev```
-navigate to localhost:3000
-get prompted for you location
-refresh the page
-weather auto loads
-map auto loads
+running:
+
+- ```yarn dev```
+- navigate to localhost:3000
+- get prompted for you location
+- refresh the page
+- weather auto loads
+- map auto loads
 
 interesting: 
 
@@ -16,7 +18,6 @@ open dev tools,
 open the console,
 
 click the three dots in the top right next to the close button,
-
 more tools > sensors
 
 sensors tab opens on the bottom of dev tools

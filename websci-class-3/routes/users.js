@@ -3,6 +3,11 @@ var router = express.Router();
 
 /* GET users listing. */
 router.get('/', function(req, res, next) {
+
+  console.log("Users Endpoint")
+
+  console.log(req)
+
   res.send('respond with a resource');
 });
 
