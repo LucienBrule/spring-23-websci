@@ -1,0 +1,47 @@
+services:
+  gateway:
+    container_name: gateway
+    image: registry.redhat.com/ubi8/nginx-120
+    command: nginx -g "daemon off;"
+    ports:
+      - 8080:8080
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf:z
+      - ./gateway/modules:/etc/nginx/modules:z
+    environment:
+      - NGINX_HOST=fedora
+      - NGINX_PORT=8080
+    depends_on:
+      - api
+      - web
+  api:
+    container_name: api
+    image: websci/api:latest
+    build:
+      context: api
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+      - /app/dist
+    command: yarn run dev
+    ports:
+      - 3000:3000
+    environment:
+      - NODE_ENV=development
+      - PORT=3000
+  web:
+    container_name: web
+    image: websci/web:latest
+    working_dir: /app
+    build:
+      context: web
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+      - /app/dist
+    command: yarn run dev
+    ports:
+      - 3001:3001
+    environment:
+      - NODE_ENV=development
+      - PORT=3001
