@@ -1,0 +1,57 @@
+{
+    "basics": {
+      "name": "Lucien Brule",
+      "email": "brulel@rpi.edu",
+      "phone": "(818) 636-3761",
+      "github": "github.com/lucienbrule",
+      "location": {
+        "address": "1544 Bel Aire Dr.",
+        "postalCode": "91201",
+        "city": "Glendale",
+        "countryCode": "US"
+      }
+    },
+    "work": [{
+      "name": "Rama",
+      "position": "Apprentice",
+      "url": "https://www.loreal.com/en/",
+      "startDate": "02-14-2023",
+      "endDate": "09-10-2023",
+      "summary": "Fellowship",
+      "highlights": [
+        "Learned a lot"
+      ]
+    }],
+    "volunteer": [{
+      "organization": "Bwenzi.org",
+      "position": "Volunteer",
+      "url": "https://www.bwenzi.org/",
+      "startDate": "09-16-2022",
+      "endDate": "05-05-2025",
+      "summary": "Raising money for health and education initatives for 3 villages in Malawi",
+      "highlights": [
+        "Vice President"
+      ]
+    }],
+    "education": [{
+      "institution": "Rensselaer Polytechnic Institute",
+      "url": "https://www.rpi.edu/",
+      "major": "Information Technology and Web Science",
+      "studyType": "Bachelor",
+      "startDate": "08-2021",
+      "endDate": "05-2025"
+    }],
+    "skills": [{
+      "name": "Web Development",
+      "keywords": [
+        "HTML",
+        "CSS",
+        "JavaScript",
+        "C++"
+      ]
+    }],
+    "languages": [{
+      "language": "English",
+      "fluency": "Native speaker"
+    }]
+  }

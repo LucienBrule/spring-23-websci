@@ -1,0 +1,59 @@
+services:
+  gateway:
+    container_name: gateway
+    image: registry.access.redhat.com/ubi8/nginx-120
+    command: nginx -g "daemon off;"
+    ports:
+      - 9000:8080
+    volumes:
+      - ./gateway/nginx.conf:/etc/nginx/nginx.conf
+      - ./gateway/modules:/etc/nginx/modules
+    environment:
+      - NGINX_HOST=fedora
+      - NGINX_PORT=8080
+    depends_on:
+      - api
+      - web
+  api:
+    container_name: api
+    image: websci/api:latest
+    build:
+      context: api
+    volumes:
+      - ./api:/app
+      - /app/node_modules
+      - /app/dist
+    command: yarn run dev
+    ports:
+      - 9001:8080
+    environment:
+      - NODE_ENV=development
+      - MONGO_URL=mongodb://developer:developer@mongo:27017/websci
+      - PORT=8080
+  web:
+    container_name: web
+    image: websci/web:latest
+    working_dir: /app
+    build:
+      context: web
+    volumes:
+      - ./web:/app
+      - /app/node_modules
+    command: yarn run dev
+    ports:
+      - 9002:8080
+    environment:
+      - NODE_ENV=development
+      - PORT=8080
+  mongo:
+    container_name: mongo
+    image: mongo:4.2.3
+    ports:
+      - 27017:27017
+    volumes:
+      - ./mongo:/data/db
+    environment:
+      - MONGO_INITDB_ROOT_USERNAME=developer
+      - MONGO_INITDB_ROOT_PASSWORD=developer
+      - MONGO_INITDB_DATABASE=websci
+    command: mongod --auth
