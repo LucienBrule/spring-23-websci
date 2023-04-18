@@ -23,7 +23,7 @@ services:
       - ./api:/app
       - /app/node_modules
       - /app/dist
-    command: yarn run tsc-node
+    command: yarn run dev
     ports:
       - 9001:8080
     environment:
