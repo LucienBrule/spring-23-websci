@@ -1,0 +1,28 @@
+# api/Dockerfile.prod
+# Build stage
+FROM node:19-alpine AS build
+
+WORKDIR /app
+
+COPY package.json .
+COPY yarn.lock .
+
+RUN yarn
+
+COPY . .
+
+RUN yarn build
+
+# Runtime stage
+FROM node:19-alpine
+
+WORKDIR /app
+
+COPY package.json .
+COPY yarn.lock .
+
+RUN yarn --production
+
+COPY --from=build /app/dist /app/dist
+
+CMD yarn start
