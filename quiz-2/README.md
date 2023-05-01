@@ -1,16 +1,16 @@
-# Web Science Lab 3
+# Web Science Quiz 2
 
 Step 1.: Build
 
-```podman-compose build```
+```docker-compose build```
 
 Step 2.: Run
 
-```podman-compose up -d```
+```docker-compose up -d```
 
 Step3.: Logs
 
-```podman-compose logs --follow```
+```docker-compose logs --follow```
 
 ---
 
@@ -20,4 +20,6 @@ This project implements a basic client server architecture with the codebase spl
 
 It uses nginx as a reverse proxy to handle routing between both services, exposing them on the same url.
 
+**NOTE** The class lab VMS don't have enough resources to run this stack, so you'll need to run it on your own machine.
+(which is incredibly easy, just follow the steps above)
 

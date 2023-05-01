@@ -61,7 +61,12 @@ router.get(BASE_PATH, (req, res) => {
  */
 router.get(`${BASE_PATH}/:number`, (req, res) => {
     const number = Number(req.params.number);
-    res.json(Quiz2Mock.getDocument(number));
+    try{
+        res.json(Quiz2Mock.getDocument(number));
+    }
+    catch (e) {
+        res.status(404).send("Not Found");
+    }
 });
 
 /**
