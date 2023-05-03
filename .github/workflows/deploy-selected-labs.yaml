@@ -2,10 +2,8 @@ name: Deploy Selected Labs to OpenShift
 
 on:
   workflow_dispatch:
-    inputs:
-      labs:
-        description: 'Comma-separated list of labs to deploy (e.g., lab-1,lab-3)'
-        required: true
+
+
 
 jobs:
   deploy:
@@ -39,7 +37,7 @@ jobs:
       - name: Build and push Web Docker image
         env:
           LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository | lower }}/${{LAB_NAME}}-web:${{ github.sha }}
+          IMAGE_TAG: "ghcr.io/${{ github.repository | lower }}/${{LAB_NAME}}-web:${{ github.sha }}"
         run: |
           cd $LAB_NAME/web
           docker build -t $IMAGE_TAG .
