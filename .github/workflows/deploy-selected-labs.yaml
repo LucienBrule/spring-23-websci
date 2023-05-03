@@ -12,7 +12,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        lab: ${{fromJson(github.event.inputs.labs)}}
+        lab: ['lab-3']
     steps:
       - name: Debug labs input
         run: "echo labs: ${{ github.event.inputs.labs }}"
