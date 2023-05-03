@@ -28,7 +28,7 @@ jobs:
       - name: Build and push API Docker image
         env:
           LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{LAB_NAME}}-api:${{ github.sha }}"
+          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-api:${{ github.sha }}"
         run: |
           cd $LAB_NAME/api
           IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
@@ -38,7 +38,7 @@ jobs:
       - name: Build and push Web Docker image
         env:
           LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{LAB_NAME}}-web:${{ github.sha }}"
+          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:${{ github.sha }}"
         run: |
           cd $LAB_NAME/web
           IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
@@ -62,6 +62,8 @@ jobs:
       - name: Deploy Helm chart
         env:
           LAB_NAME: ${{ matrix.lab }}
+          API_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-api:${{ github.sha }}"
+          WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:${{ github.sha }}"
         run: |
           cd $LAB_NAME/k8s
           # Set your OpenShift context, project, and any other required configurations
