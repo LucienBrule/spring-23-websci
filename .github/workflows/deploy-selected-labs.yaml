@@ -14,6 +14,9 @@ jobs:
       matrix:
         lab: ${{fromJson(github.event.inputs.labs)}}
     steps:
+      - name: Debug labs input
+        run: echo "labs: ${{ github.event.inputs.labs }}"
+
       - name: Checkout repository
         uses: actions/checkout@v2
 
