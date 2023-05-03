@@ -1,5 +1,5 @@
 global:
-  githubUsername: LucienBrule
+  githubUsername: lucienbrule
   repositoryName: spring-23-websci
   gitRepositoryHost: github.com
   imageRepositoryHost: ghcr.io
