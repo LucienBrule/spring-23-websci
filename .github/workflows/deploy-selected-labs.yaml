@@ -39,9 +39,9 @@ jobs:
       - name: Build and push Web Docker image
         env:
           LAB_NAME: ${{ matrix.lab }}
+          IMAGE_TAG: "ghcr.io/${{ github.repository | lower }}/${{LAB_NAME}}-web:${{ github.sha }}
         run: |
           cd $LAB_NAME/web
-          IMAGE_TAG="ghcr.io/${{ github.repository | lower}/${LAB_NAME}-web:${{ github.sha }}"
           docker build -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
