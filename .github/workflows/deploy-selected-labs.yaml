@@ -34,7 +34,6 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y docker-ce docker-ce-cli containerd.io
 
-
       - name: Build and push API Docker image
         env:
           LAB_NAME: ${{ matrix.lab }}
