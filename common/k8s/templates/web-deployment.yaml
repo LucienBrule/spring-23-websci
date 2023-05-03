@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: {{.Chart.Name}}-web
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: {{.Chart.Name}}-web
+  template:
+    metadata:
+      labels:
+        app: {{.Chart.Name}}-web
+    spec:
+      containers:
+        - name: {{.Chart.Name}}-web
+          image: {{ printf "%s/%s-web:%s" .Values.global.githubUsername .Values.global.repositoryName .Values.global.githubSHA | lower }}
+          ports:
+            - containerPort: 8080
+          env:
+            - name: NODE_ENV
+              value: production
+            - name: PORT
+              value: "8080"
+          command: ["yarn"]
+          args: ["start"]

@@ -1,0 +1,10 @@
+apiVersion: image.openshift.io/v1
+kind: ImageStream
+metadata:
+  name: {{.Chart.Name}}-api
+spec:
+  tags:
+    - name: latest
+      from:
+        kind: DockerImage
+        name: {{ printf "%s/%s-api:latest" .Values.global.imageRepository .Values.global.imagePrefix | lower }}

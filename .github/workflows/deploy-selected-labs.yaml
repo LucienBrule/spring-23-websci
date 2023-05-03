@@ -1,0 +1,67 @@
+name: Deploy Selected Labs to OpenShift
+
+on:
+  workflow_dispatch:
+    inputs:
+      labs:
+        description: 'Comma-separated list of labs to deploy (e.g., lab-1,lab-3)'
+        required: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lab: ${{fromJson(github.event.inputs.labs)}}
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push API Docker image
+        env:
+          LAB_NAME: ${{ matrix.lab }}
+        run: |
+          cd $LAB_NAME/api
+          IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-api:${{ github.sha }}"
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+
+      - name: Build and push Web Docker image
+        env:
+          LAB_NAME: ${{ matrix.lab }}
+        run: |
+          cd $LAB_NAME/web
+          IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-web:${{ github.sha }}"
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+
+      - name: Login to OpenShift Cluster
+        env:
+          OPENSHIFT_API_URL: ${{ secrets.OPENSHIFT_API_URL }}
+          SERVICE_ACCOUNT_TOKEN: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
+        run: |
+          oc login $OPENSHIFT_API_URL --token=$SERVICE_ACCOUNT_TOKEN --insecure-skip-tls-verify
+
+      - name: Set OpenShift Project
+        env:
+          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+        run: |
+          oc project $OPENSHIFT_NAMESPACE
+
+
+      - name: Deploy Helm chart
+        env:
+          LAB_NAME: ${{ matrix.lab }}
+        run: |
+          cd $LAB_NAME/k8s
+          # Set your OpenShift context, project, and any other required configurations
+          API_IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-api:${{ github.sha }}"
+          WEB_IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-web:${{ github.sha }}"
+          helm upgrade --install $LAB_NAME . --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.sha }}
