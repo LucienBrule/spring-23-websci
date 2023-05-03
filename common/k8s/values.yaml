@@ -5,15 +5,15 @@ global:
   imageRepositoryHost: ghcr.io
   domainName: prod.brule.io
 
-  gitRepositoryUri: "{{ printf "https://%s/%s/%s.git" .Values.global.gitRepositoryHost .Values.global.githubUsername .Values.global.repositoryName }}"
-  imageRepository: "{{ printf "%s/%s/%s" .Values.global.imageRepositoryHost .Values.global.githubUsername .Values.global.repositoryName | lower }}"
+  gitRepositoryUri: "{{ printf \"https://%s/%s/%s.git\" .Values.global.gitRepositoryHost .Values.global.githubUsername .Values.global.repositoryName }}"
+  imageRepository: "{{ printf \"%s/%s/%s\" .Values.global.imageRepositoryHost .Values.global.githubUsername .Values.global.repositoryName | lower }}"
 
-  imagePrefix: "{{ printf "%s/%s-%s" .Values.global.githubUsername .Values.global.repositoryName .Chart.name | lower }}"
+  imagePrefix: "{{ printf \"%s/%s-%s\" .Values.global.githubUsername .Values.global.repositoryName .Chart.name | lower }}"
 
   api:
     baseImage:
       name: registry.access.redhat.com/ubi8/nodejs-16:latest
-    imageStreamTag: "{{ printf "%s-api:latest" .Values.global.imagePrefix }}"
+    imageStreamTag: "{{ printf \"%s-api:latest\" .Values.global.imagePrefix }}"
 
   client:
     baseImage:
@@ -24,7 +24,7 @@ common:
   api:
     baseImage:
       name: registry.access.redhat.com/ubi8/nodejs-16:latest
-    imageStreamTag: "{{ printf "%s-api:latest" .Values.global.imagePrefix }}"
+    imageStreamTag: "{{ printf \"%s-api:latest\" .Values.global.imagePrefix }}"
   client:
     baseImage:
       name: registry.access.redhat.com/ubi8/nodejs-16:latest
