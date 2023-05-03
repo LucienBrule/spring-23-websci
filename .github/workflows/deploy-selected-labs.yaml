@@ -32,7 +32,7 @@ jobs:
           LAB_NAME: ${{ matrix.lab }}
         run: |
           cd $LAB_NAME/api
-          IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-api:${{ github.sha }}"
+          IMAGE_TAG="ghcr.io/${{ github.repository | lower }}/${LAB_NAME}-api:${{ github.sha }}"
           docker build -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
@@ -41,7 +41,7 @@ jobs:
           LAB_NAME: ${{ matrix.lab }}
         run: |
           cd $LAB_NAME/web
-          IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-web:${{ github.sha }}"
+          IMAGE_TAG="ghcr.io/${{ github.repository | lower}/${LAB_NAME}-web:${{ github.sha }}"
           docker build -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
@@ -65,6 +65,6 @@ jobs:
         run: |
           cd $LAB_NAME/k8s
           # Set your OpenShift context, project, and any other required configurations
-          API_IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-api:${{ github.sha }}"
-          WEB_IMAGE_TAG="ghcr.io/${{ github.repository }}/${LAB_NAME}-web:${{ github.sha }}"
+          API_IMAGE_TAG="ghcr.io/${{ github.repository | lower }}/${LAB_NAME}-api:${{ github.sha }}"
+          WEB_IMAGE_TAG="ghcr.io/${{ github.repository | lower }}/${LAB_NAME}-web:${{ github.sha }}"
           helm upgrade --install $LAB_NAME . --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.sha }}
