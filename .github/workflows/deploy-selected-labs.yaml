@@ -28,18 +28,20 @@ jobs:
       - name: Build and push API Docker image
         env:
           LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository | lower }}/${{LAB_NAME}}-api:${{ github.sha }}"
+          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{LAB_NAME}}-api:${{ github.sha }}"
         run: |
           cd $LAB_NAME/api
+          IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
           docker build -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
       - name: Build and push Web Docker image
         env:
           LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository | lower }}/${{LAB_NAME}}-web:${{ github.sha }}"
+          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{LAB_NAME}}-web:${{ github.sha }}"
         run: |
           cd $LAB_NAME/web
+          IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
           docker build -t $IMAGE_TAG .
           docker push $IMAGE_TAG
 
@@ -63,6 +65,11 @@ jobs:
         run: |
           cd $LAB_NAME/k8s
           # Set your OpenShift context, project, and any other required configurations
-          API_IMAGE_TAG="ghcr.io/${{ github.repository | lower }}/${LAB_NAME}-api:${{ github.sha }}"
-          WEB_IMAGE_TAG="ghcr.io/${{ github.repository | lower }}/${LAB_NAME}-web:${{ github.sha }}"
+          API_IMAGE_TAG=$(echo $API_IMAGE_TAG | tr '[:upper:]' '[:lower:]')
+          WEB_IMAGE_TAG=$(echo $WEB_IMAGE_TAG | tr '[:upper:]' '[:lower:]')
+
+          echo "Deploying $LAB_NAME with API image tag $API_IMAGE_TAG and Web image tag $WEB_IMAGE_TAG"
+
           helm upgrade --install $LAB_NAME . --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.sha }}
+
+          echo "Rollout complete !!! 🎉💯🤠"
