@@ -2,8 +2,6 @@ apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
   name: {{.Release.Name}}-web
-  annotations:
-    "helm.sh/resource-policy": keep
 spec:
   host: {{ .Release.Name }}.{{ .Values.global.domainName }}
   to:
