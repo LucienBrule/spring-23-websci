@@ -4,7 +4,7 @@ global:
   githubUsername: lucienbrule
   imageRepositoryHost: ghcr.io
   domainName: prod.brule.io
-  imagePullSecret: dockerconfigjson-github-com
+  imagePullSecret: regcred
 
 
 api:

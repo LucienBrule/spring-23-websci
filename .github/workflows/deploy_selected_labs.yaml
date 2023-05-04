@@ -34,10 +34,20 @@ jobs:
           LAB_NAME: ${{ matrix.lab }}
           API_IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-api:latest"
           WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest"
+          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
         run: |
           API_IMAGE_TAG=$(echo "${API_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
           WEB_IMAGE_TAG=$(echo "${WEB_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
 
           helm dependency build
+
           echo "Deploying $LAB_NAME with API image tag $API_IMAGE_TAG and Web image tag $WEB_IMAGE_TAG"
-          helm upgrade --install $LAB_NAME . -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+
+          if ! helm status $LAB_NAME > /dev/null 2>&1; then
+            helm install $LAB_NAME . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+          else
+            helm upgrade $LAB_NAME . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+          fi
+
+
+
