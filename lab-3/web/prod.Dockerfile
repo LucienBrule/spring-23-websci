@@ -24,8 +24,7 @@ COPY --from=build /app/dist /opt/app-root/src
 # Copy the Nginx configuration file
 COPY nginx.conf /etc/nginx/nginx.conf
 
-# Create the modules/http directory and copy the root.conf file
-RUN mkdir -p /etc/nginx/modules/http
+# Copy the root.conf file into the existing modules/http directory
 COPY root.conf /etc/nginx/modules/http/root.conf
 
 # Expose the Nginx server port
