@@ -9,4 +9,4 @@ spec:
     - name: latest
       from:
         kind: DockerImage
-        name: "{{ include "chart.api.image.url" . }}"
+        name: {{.Values.api.image}}

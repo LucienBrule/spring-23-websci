@@ -5,6 +5,10 @@ global:
   imageRepositoryHost: ghcr.io
   domainName: prod.brule.io
 
+api:
+  image: ghcr.io/lucienbrule/spring-23-websci/lab-3-api:latest
+web:
+  image: ghcr.io/lucienbrule/spring-23-websci/lab-3-web:latest
 
 common:
   api:
