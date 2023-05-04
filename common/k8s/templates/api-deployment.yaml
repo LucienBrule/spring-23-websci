@@ -11,7 +11,13 @@ spec:
     metadata:
       labels:
         app: {{.Release.Name}}-api
+      annotations:
+        seccomp.security.alpha.kubernetes.io/pod: runtime/default  # or localhost
     spec:
+      securityContext:
+        runAsNonRoot: true
+        seccompProfile:
+          type: RuntimeDefault  # or Localhost
       containers:
         - name: {{.Release.Name}}-api
           image: {{ (include "chart.api.imageStreamTag" .) | lower }}
@@ -24,3 +30,8 @@ spec:
               value: "8080"
           command: [ "yarn" ]
           args: [ "start" ]
+          securityContext:
+            allowPrivilegeEscalation: false
+            capabilities:
+              drop:
+                - ALL

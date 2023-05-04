@@ -24,3 +24,11 @@ spec:
               value: "8080"
           command: ["yarn"]
           args: ["start"]
+          securityContext:
+            allowPrivilegeEscalation: false
+            runAsNonRoot: true
+            capabilities:
+              drop:
+                - ALL
+            seccompProfile:
+              type: RuntimeDefault
