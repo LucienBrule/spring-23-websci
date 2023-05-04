@@ -1,11 +1,10 @@
-name: Build API
+name: Build Web
 
 on:
   workflow_dispatch:
 
-
 jobs:
-  build-api:
+  build_web:
     runs-on: ubuntu-latest
     permissions:
       contents: write
@@ -24,11 +23,11 @@ jobs:
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
 
-     - name: Build and push API Docker image
-        working-directory: ${{ matrix.lab }}/api
+      - name: Build and push API Docker image
+        working-directory: ${{ matrix.lab }}/web
         env:
           LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-api"
+          IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-web"
           IMAGE_TAG_SHA: "${{ github.sha }}"
         run: |
           IMAGE_TAG_SHA=$(echo "${IMAGE_TAG}:${IMAGE_TAG_SHA}" | tr '[:upper:]' '[:lower:]')
@@ -37,4 +36,3 @@ jobs:
           docker push $IMAGE_TAG_SHA
           docker tag $IMAGE_TAG_SHA $IMAGE_TAG_LATEST
           docker push $IMAGE_TAG_LATEST
-
