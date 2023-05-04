@@ -19,7 +19,7 @@ spec:
         seccompProfile:
           type: RuntimeDefault  # or Localhost
       imagePullSecrets:
-        - name: {{.Values.imagePullSecrets}}
+        - name: {{.Values.global.imagePullSecret}}
       containers:
         - name: {{.Release.Name}}-api
           image: "{{include "chart.api.image.url" . }}"

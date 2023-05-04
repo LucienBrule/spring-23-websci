@@ -13,7 +13,7 @@ spec:
         app: {{.Release.Name}}-web
     spec:
       imagePullSecrets:
-        - name: {{.Values.imagePullSecrets}}
+        - name: {{.Values.global.imagePullSecret}}
       containers:
         - name: {{.Release.Name}}-web
           image: "{{ include "chart.web.image.url" . }}"
