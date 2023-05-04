@@ -23,8 +23,7 @@ jobs:
           registry: ghcr.io
           username: ${{ github.actor }}
           password: ${{ secrets.GHCR_PAT }}
-
-     - name: Build and push API Docker image
+      - name: Build and push API Docker image
         working-directory: ${{ matrix.lab }}/api
         env:
           LAB_NAME: ${{ matrix.lab }}
