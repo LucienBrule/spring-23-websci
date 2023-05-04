@@ -3,6 +3,10 @@ name: Build API
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+  packages: write
+
 jobs:
   build-api:
     runs-on: ubuntu-latest
