@@ -33,8 +33,8 @@ spec:
               value: production
             - name: PORT
               value: "8080"
-          command: [ "yarn" ]
-          args: [ "start" ]
+          command: [ "node" ]
+          args: [ "/app/dist/index.js" ]
           securityContext:
             allowPrivilegeEscalation: false
             capabilities:
