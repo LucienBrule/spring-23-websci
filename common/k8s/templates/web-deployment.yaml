@@ -12,6 +12,8 @@ spec:
       labels:
         app: {{.Release.Name}}-web
     spec:
+      imagePullSecrets:
+        - name: {{.Values.imagePullSecrets}}
       containers:
         - name: {{.Release.Name}}-web
           image: "{{ include "chart.web.image.url" . }}"

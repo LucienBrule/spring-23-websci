@@ -4,6 +4,8 @@ global:
   githubUsername: lucienbrule
   imageRepositoryHost: ghcr.io
   domainName: prod.brule.io
+  imagePullSecret: dockerconfigjson-github-com
+
 
 api:
   image: ghcr.io/lucienbrule/spring-23-websci/lab-3-api:latest

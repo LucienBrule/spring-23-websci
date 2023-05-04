@@ -18,9 +18,12 @@ spec:
         runAsNonRoot: true
         seccompProfile:
           type: RuntimeDefault  # or Localhost
+      imagePullSecrets:
+        - name: {{.Values.imagePullSecrets}}
       containers:
         - name: {{.Release.Name}}-api
           image: "{{include "chart.api.image.url" . }}"
+          imagePullPolicy: Always
           ports:
             - containerPort: 8080
           env:
