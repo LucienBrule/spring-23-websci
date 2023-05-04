@@ -1,10 +1,7 @@
 name: Deploy Selected Labs to OpenShift
 
 on:
-  workflow_run:
-    workflows: ["Build API", "Build Web"]
-    types:
-      - completed
+  workflow_dispatch:
 
 
 jobs:
