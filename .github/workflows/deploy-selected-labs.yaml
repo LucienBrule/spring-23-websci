@@ -6,12 +6,10 @@ on:
     types:
       - completed
 
-permissions:
-  contents: write
-  packages: write
 
 jobs:
   deploy:
+    if: ${{ github.event.workflow_run.conclusion == 'success' }}
     runs-on: ubuntu-latest
     strategy:
       matrix:
@@ -21,6 +19,7 @@ jobs:
         uses: actions/checkout@v2
 
       - name: Login to OpenShift Cluster
+        id: login-to-openshift
         env:
           OPENSHIFT_API_URL: ${{ secrets.OPENSHIFT_API_URL }}
           SERVICE_ACCOUNT_TOKEN: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
@@ -34,6 +33,7 @@ jobs:
           oc project $OPENSHIFT_NAMESPACE
 
       - name: Deploy Helm chart
+        working-directory: ${{ matrix.lab }}/k8s
         env:
           LAB_NAME: ${{ matrix.lab }}
           API_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-api:${{ github.event.workflow_run.head_sha }}"
@@ -42,10 +42,8 @@ jobs:
           # Set your OpenShift context, project, and any other required configurations
           API_IMAGE_TAG=$(echo $API_IMAGE_TAG | tr '[:upper:]' '[:lower:]')
           WEB_IMAGE_TAG=$(echo $WEB_IMAGE_TAG | tr '[:upper:]' '[:lower:]')
-          helm dependency build $LAB_NAME/k8s/
+          helm dependency build
 
           echo "Deploying $LAB_NAME with API image tag $API_IMAGE_TAG and Web image tag $WEB_IMAGE_TAG"
 
-          helm upgrade --install $LAB_NAME $LAB_NAME/k8s -f common/k8s/values.yaml -f $LAB_NAME/k8s/values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
-
-          echo "Rollout complete !!! 🎉💯🤠"
+          helm upgrade --install $LAB_NAME . -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}

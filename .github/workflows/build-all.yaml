@@ -8,20 +8,28 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Build API workflow
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/build-api.yml/dispatches \
-            -d '{"ref": "${{ github.ref }}"}'
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-api.yml',
+              ref: context.ref
+            });
 
   trigger-build-web:
     runs-on: ubuntu-latest
     steps:
       - name: Trigger Build Web workflow
-        run: |
-          curl -X POST \
-            -H "Accept: application/vnd.github.v3+json" \
-            -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" \
-            https://api.github.com/repos/${{ github.repository }}/actions/workflows/build-web.yml/dispatches \
-            -d '{"ref": "${{ github.ref }}"}'
+        uses: actions/github-script@v5
+        with:
+          github-token: ${{ secrets.GITHUB_TOKEN }}
+          script: |
+            await github.actions.createWorkflowDispatch({
+              owner: context.repo.owner,
+              repo: context.repo.repo,
+              workflow_id: 'build-web.yml',
+              ref: context.ref
+            });
