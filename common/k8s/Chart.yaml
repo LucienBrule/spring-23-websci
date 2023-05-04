@@ -2,3 +2,4 @@ apiVersion: v2
 name: common
 description: Kubernetes manifests for common
 name: common
+version: 0.1.0
