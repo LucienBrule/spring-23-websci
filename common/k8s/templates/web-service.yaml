@@ -1,7 +1,7 @@
 apiVersion: route.openshift.io/v1
 kind: Route
 metadata:
-  name: web
+  name: {{.Release.Name}}-web
 spec:
   host: {{ .Release.Name }}.{{ .Values.global.domainName }}
   to:
