@@ -15,5 +15,5 @@ https://{{ .Values.global.gitRepositoryHost }}/{{ .Values.global.githubUsername 
 {{- end -}}
 
 {{- define "chart.api.image.url" -}}
-{{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName | lower }}/{{ .Values.global.alias }}-web:{{ .Values.global.githubSHA }}
+{{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName | lower }}/{{ .Values.global.alias }}-api:{{ .Values.global.githubSHA }}
 {{- end -}}
