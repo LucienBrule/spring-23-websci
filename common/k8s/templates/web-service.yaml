@@ -1,15 +1,14 @@
-apiVersion: route.openshift.io/v1
-kind: Route
+apiVersion: v1
+kind: Service
 metadata:
-  name: {{.Release.Name}}-web
-  annotations:
-    "helm.sh/resource-policy": keep
+  name: {{ .Release.Name }}-web
+  labels:
+    app: {{ .Release.Name }}-web
 spec:
-  host: {{ .Release.Name }}.{{ .Values.global.domainName }}
-  to:
-    kind: Service
-    name: {{ .Release.Name }}-web
-    weight: 100
-  port:
-    targetPort: 8080
-  wildcardPolicy: None
+  ports:
+    - name: http
+      port: 8080
+      targetPort: 8080
+  selector:
+    app: {{ .Release.Name }}-web
+  type: ClusterIP

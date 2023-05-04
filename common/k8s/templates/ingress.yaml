@@ -1,0 +1,26 @@
+kind: Ingress
+metadata:
+  name: {{.Release.Name}}
+  labels:
+    app: {{.Values.app}}
+  annotations:
+    route.openshift.io/termination: "edge"
+spec:
+  rules:
+    - host: {{.Values.host}}
+      http:
+        paths:
+          - backend:
+              service:
+                name: {{.Release.Name}}-web
+                port:
+                  number: 8080
+              path: /
+              pathType: ImplementationSpecific
+          - backend:
+              service:
+                name: {{.Release.Name}}-api
+                port:
+                  number: 8080
+              path: /api
+              pathType: ImplementationSpecific
