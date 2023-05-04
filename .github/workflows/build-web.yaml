@@ -5,6 +5,7 @@ on:
 
 jobs:
   build-web:
+    id: build-web
     runs-on: ubuntu-latest
     permissions:
       contents: write
