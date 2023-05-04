@@ -1,0 +1,33 @@
+name: Build Web
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build-web:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lab: ['lab-3']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Build and push Web Docker image
+        env:
+          LAB_NAME: ${{ matrix.lab }}
+          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:${{ github.sha }}"
+        run: |
+          cd $LAB_NAME/web
+          IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_TAG .
+          docker push $IMAGE_TAG
+          docker tag $IMAGE_TAG ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest
+          docker push ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest

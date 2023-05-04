@@ -1,9 +1,10 @@
 name: Deploy Selected Labs to OpenShift
 
 on:
-  workflow_dispatch:
-
-
+  workflow_run:
+    workflows: ["Build API", "Build Web"]
+    types:
+      - completed
 
 jobs:
   deploy:
@@ -12,39 +13,8 @@ jobs:
       matrix:
         lab: ['lab-3']
     steps:
-      - name: Debug labs input
-        run: "echo labs: ${{ github.event.inputs.labs }}"
-
       - name: Checkout repository
         uses: actions/checkout@v2
-
-      - name: Login to GitHub Container Registry
-        uses: docker/login-action@v1
-        with:
-          registry: ghcr.io
-          username: ${{ github.actor }}
-          password: ${{ secrets.GHCR_PAT}}
-
-
-      - name: Build and push API Docker image
-        env:
-          LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-api:${{ github.sha }}"
-        run: |
-          cd $LAB_NAME/api
-          IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
-          docker build -t $IMAGE_TAG .
-          docker push $IMAGE_TAG
-
-      - name: Build and push Web Docker image
-        env:
-          LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:${{ github.sha }}"
-        run: |
-          cd $LAB_NAME/web
-          IMAGE_TAG=$(echo $IMAGE_TAG | tr '[:upper:]' '[:lower:]')
-          docker build -t $IMAGE_TAG .
-          docker push $IMAGE_TAG
 
       - name: Login to OpenShift Cluster
         env:
@@ -55,28 +25,4 @@ jobs:
 
       - name: Set OpenShift Project
         env:
-          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
-        run: |
-          oc project $OPENSHIFT_NAMESPACE
-
-
-      - name: Deploy Helm chart
-        env:
-          LAB_NAME: ${{ matrix.lab }}
-          API_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-api:${{ github.sha }}"
-          WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:${{ github.sha }}"
-        run: |
-          # Set your OpenShift context, project, and any other required configurations
-          API_IMAGE_TAG=$(echo $API_IMAGE_TAG | tr '[:upper:]' '[:lower:]')
-          WEB_IMAGE_TAG=$(echo $WEB_IMAGE_TAG | tr '[:upper:]' '[:lower:]')
-
-
-
-          helm dependency build $LAB_NAME/k8s/
-
-
-          echo "Deploying $LAB_NAME with API image tag $API_IMAGE_TAG and Web image tag $WEB_IMAGE_TAG"
-
-          helm upgrade --install $LAB_NAME $LAB_NAME/k8s -f common/k8s/values.yaml -f $LAB_NAME/k8s/values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.sha }} --set global.alias=${{ matrix.lab }}
-
-          echo "Rollout complete !!! 🎉💯🤠"
+          OPENSHIFT_NAMESPACE:
