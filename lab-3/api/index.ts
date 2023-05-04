@@ -24,17 +24,6 @@ const hashFunction = (str: string) => {
 
 
 // Routes
-
-app.get('/*', (req: Request, res: Response) => {
-
-//     Debug, send back the request and headers
-
-    const headers = JSON.stringify(req.headers,null,2);
-    const request = JSON.stringify(req,null,2);
-    res.send('Hello World! \n\n' + headers + '\n\n' + request);
-
-});
-
 app.get('/', (req: Request, res: Response) => {
   res.send('api root');
 });
