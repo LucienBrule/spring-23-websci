@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: {{.Chart.Name}}-web
+  name: {{.Release.Name}}-web
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: {{.Chart.Name}}-web
+      app: {{.Release.Name}}-web
   template:
     metadata:
       labels:
-        app: {{.Chart.Name}}-web
+        app: {{.Release.Name}}-web
     spec:
       containers:
-        - name: {{.Chart.Name}}-web
-          image: {{ printf "%s/%s-web:%s" .Values.global.githubUsername .Values.global.repositoryName .Values.global.githubSHA | lower }}
+        - name: {{.Release.Name}}-web
+          image: {{ (include "chart.web.imageStreamTag" .) | lower }}
           ports:
             - containerPort: 8080
           env:

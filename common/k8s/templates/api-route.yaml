@@ -3,11 +3,11 @@ kind: Route
 metadata:
   name: api
 spec:
-  host: {{.Chart.Name}}.{{.Values.global.domainName}}
+  host: {{.Release.Name}}.{{.Values.global.domainName}}
   path: /api
   to:
     kind: Service
-    name: {{.Chart.Name}}-api
+    name: {{.Release.Name}}-api
     weight: 100
   port:
     targetPort: 8080

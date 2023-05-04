@@ -3,10 +3,10 @@ kind: Route
 metadata:
   name: web
 spec:
-  host: {{ .Chart.Name }}.{{ .Values.global.domainName }}
+  host: {{ .Release.Name }}.{{ .Values.global.domainName }}
   to:
     kind: Service
-    name: {{ .Chart.Name }}-web
+    name: {{ .Release.Name }}-web
     weight: 100
   port:
     targetPort: 8080
