@@ -4,32 +4,11 @@ on:
   workflow_dispatch:
 
 jobs:
-  trigger-build-api:
+  build:
     runs-on: ubuntu-latest
     steps:
-      - name: Trigger Build API workflow
-        uses: actions/github-script@v6
-        with:
-          github-token: ${{ secrets.GH_PAT }}
-          script: |
-            await github.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'build-api.yml',
-              ref: context.ref
-            });
+      - name: Build API
+        uses: ./.github/workflows/build-api.yaml
 
-  trigger-build-web:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Trigger Build Web workflow
-        uses: actions/github-script@v5
-        with:
-          github-token: ${{ secrets.GH_PAT }}
-          script: |
-            await github.actions.createWorkflowDispatch({
-              owner: context.repo.owner,
-              repo: context.repo.repo,
-              workflow_id: 'build-web.yml',
-              ref: context.ref
-            });
+      - name: Build Web
+        uses: ./.github/workflows/build-web.yaml
