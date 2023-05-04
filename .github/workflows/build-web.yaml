@@ -27,7 +27,7 @@ jobs:
         working-directory: ${{ matrix.lab }}/web
         env:
           LAB_NAME: ${{ matrix.lab }}
-          IMAGE_TAG: "ghcr.io/${{ github.repository | lower }}/${{matrix.lab}}-web"
+          IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-web"
           IMAGE_TAG_SHA: "${{ github.sha }}"
         run: |
           IMAGE_TAG_SHA=$(echo "${IMAGE_TAG}:${IMAGE_TAG_SHA}" | tr '[:upper:]' '[:lower:]')
