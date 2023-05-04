@@ -20,7 +20,7 @@ spec:
           type: RuntimeDefault  # or Localhost
       containers:
         - name: {{.Release.Name}}-api
-          image: {{ (include "chart.api.imageStreamTag" .) | lower }}
+          image: "{{include "chart.api.image.url" . }}"
           ports:
             - containerPort: 8080
           env:

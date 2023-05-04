@@ -5,15 +5,6 @@ global:
   imageRepositoryHost: ghcr.io
   domainName: prod.brule.io
 
-api:
-  image:
-    repository: '{{ include "chart.imagePrefix" . }}-api'
-    tag: latest
-
-web:
-  image:
-    repository: '{{ include "chart.imagePrefix" . }}-web'
-    tag: latest
 
 common:
   api:

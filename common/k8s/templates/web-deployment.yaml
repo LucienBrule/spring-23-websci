@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
         - name: {{.Release.Name}}-web
-          image: {{ (include "chart.web.imageStreamTag" .) | lower }}
+          image: "{{ include "chart.web.image.url" . }}"
           ports:
             - containerPort: 8080
           env:

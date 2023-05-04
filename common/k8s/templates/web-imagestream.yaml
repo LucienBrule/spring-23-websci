@@ -7,4 +7,4 @@ spec:
     - name: latest
       from:
         kind: DockerImage
-        name: {{ include "chart.web.image.repository" . }}:{{ .Values.web.image.tag }}
+        name: "{{include "chart.web.image.url" . }}"

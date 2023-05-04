@@ -77,6 +77,6 @@ jobs:
 
           echo "Deploying $LAB_NAME with API image tag $API_IMAGE_TAG and Web image tag $WEB_IMAGE_TAG"
 
-          helm upgrade --install $LAB_NAME $LAB_NAME/k8s -f common/k8s/values.yaml -f $LAB_NAME/k8s/values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.sha }}
+          helm upgrade --install $LAB_NAME $LAB_NAME/k8s -f common/k8s/values.yaml -f $LAB_NAME/k8s/values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.sha }} --set global.alias=${{ matrix.lab }}
 
           echo "Rollout complete !!! 🎉💯🤠"

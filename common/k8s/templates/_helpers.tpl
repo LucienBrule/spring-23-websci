@@ -10,19 +10,10 @@ https://{{ .Values.global.gitRepositoryHost }}/{{ .Values.global.githubUsername 
 {{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName }}/{{ .Release.Name | lower }}
 {{- end -}}
 
-{{- define "chart.api.imageStreamTag" -}}
-{{ (include "chart.imagePrefix" .) }}-api:latest
+{{- define "chart.web.image.url" -}}
+{{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName | lower }}/{{ .Values.global.alias }}-web:{{ .Values.global.githubSHA }}
 {{- end -}}
 
-{{- define "chart.web.imageStreamTag" -}}
-{{ (include "chart.imagePrefix" .) }}-client:latest
-{{- end -}}
-
-
-{{- define "chart.web.image.repository" -}}
-{{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName | lower }}/{{ include "chart.imagePrefix" . }}-web
-{{- end -}}
-
-{{- define "chart.api.image.repository" -}}
-{{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName | lower }}/{{ include "chart.imagePrefix" . }}-api
+{{- define "chart.api.image.url" -}}
+{{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName | lower }}/{{ .Values.global.alias }}-web:{{ .Values.global.githubSHA }}
 {{- end -}}
