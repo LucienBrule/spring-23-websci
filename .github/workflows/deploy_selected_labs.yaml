@@ -32,8 +32,8 @@ jobs:
         working-directory: ${{ matrix.lab }}/k8s
         env:
           LAB_NAME: ${{ matrix.lab }}
-          API_IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-api:${{ github.event.workflow_run.head_sha }}"
-          WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:${{ github.event.workflow_run.head_sha }}"
+          API_IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-api:latest"
+          WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest"
         run: |
           API_IMAGE_TAG=$(echo "${API_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
           WEB_IMAGE_TAG=$(echo "${WEB_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
