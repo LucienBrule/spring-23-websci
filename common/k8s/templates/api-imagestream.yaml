@@ -7,4 +7,4 @@ spec:
     - name: latest
       from:
         kind: DockerImage
-        name: {{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.repositoryName }}-api:latest
+        name: {{ (include "chart.api.imageStreamTag" .) | lower }}
