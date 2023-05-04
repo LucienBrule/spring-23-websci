@@ -6,7 +6,6 @@ on:
 
 jobs:
   build-api:
-    id: build-api
     runs-on: ubuntu-latest
     permissions:
       contents: write
