@@ -35,7 +35,7 @@ jobs:
 
           IMAGE_TAG_SHA=$(echo "${IMAGE_TAG}:${IMAGE_TAG_SHA}" | tr '[:upper:]' '[:lower:]')
           IMAGE_TAG_LATEST=$(echo "${IMAGE_TAG}:latest" | tr '[:upper:]' '[:lower:]')
-          docker build -t $IMAGE_TAG_SHA .
+          docker build -t $IMAGE_TAG_SHA -f prod.Dockerfile .
           docker push $IMAGE_TAG_SHA
           docker tag $IMAGE_TAG_SHA $IMAGE_TAG_LATEST
           docker push $IMAGE_TAG_LATEST

@@ -13,7 +13,7 @@ spec:
         paths:
           - backend:
               service:
-                name:   {{.Release.Name}}-web
+                name: {{.Release.Name}}-web
                 port:
                   number: 8080
             path: /
