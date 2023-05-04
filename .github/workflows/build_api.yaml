@@ -30,6 +30,9 @@ jobs:
           IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-api"
           IMAGE_TAG_SHA: "${{ github.sha }}"
         run: |
+          echo "Building $LAB_NAME API image with tag $IMAGE_TAG"
+          echo "ImageTagSha: $IMAGE_TAG_SHA"
+
           IMAGE_TAG_SHA=$(echo "${IMAGE_TAG}:${IMAGE_TAG_SHA}" | tr '[:upper:]' '[:lower:]')
           IMAGE_TAG_LATEST=$(echo "${IMAGE_TAG}:latest" | tr '[:upper:]' '[:lower:]')
           docker build -t $IMAGE_TAG_SHA .
