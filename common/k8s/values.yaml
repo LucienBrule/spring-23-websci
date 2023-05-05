@@ -6,7 +6,6 @@ global:
   domainName: prod.brule.io
   imagePullSecret: regcred
 
-
 api:
   image: ghcr.io/lucienbrule/spring-23-websci/lab-3-api:latest
 web:
