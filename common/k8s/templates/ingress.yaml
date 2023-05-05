@@ -9,7 +9,7 @@ metadata:
 spec:
   ingressClassName: openshift-default
   rules:
-    - host: {{.Values.host}}
+    - host: {{.Values.ingress.host}}
       http:
         paths:
           - backend:

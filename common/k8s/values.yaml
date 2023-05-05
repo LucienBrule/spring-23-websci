@@ -10,7 +10,8 @@ api:
   image: ghcr.io/lucienbrule/spring-23-websci/lab-3-api:latest
 web:
   image: ghcr.io/lucienbrule/spring-23-websci/lab-3-web:latest
-
+ingress:
+  host: lab-3-websci.apps.prod.brule.io
 common:
   api:
     baseImage:
