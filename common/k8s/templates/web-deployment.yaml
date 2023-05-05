@@ -14,13 +14,6 @@ spec:
       labels:
         app: {{.Release.Name}}-web
     spec:
-      initContainers:
-        - name: prepare-tmp-dir
-          image: busybox
-          command: ["sh", "-c", "chown -R nginx:nginx /tmp && chmod -R 755 /tmp"]
-          volumeMounts:
-            - name: tmp-dir
-              mountPath: /tmp
       imagePullSecrets:
         - name: {{.Values.global.imagePullSecret}}
       containers:
@@ -43,9 +36,3 @@ spec:
                 - ALL
             seccompProfile:
               type: RuntimeDefault
-          volumeMounts:
-            - name: tmp-dir
-              mountPath: /tmp
-      volumes:
-        - name: tmp-dir
-          emptyDir: {}
