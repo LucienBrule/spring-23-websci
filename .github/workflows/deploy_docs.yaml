@@ -1,0 +1,33 @@
+name: Deploy docs to openshift
+
+on:
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        lab: ['docs']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+      ...
+      - name: Deploy Helm chart
+        working-directory: ${{ matrix.lab }}/k8s
+        env:
+          DOCS: ${{ matrix.lab }}
+          DOCS_IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{matrix.lab}}-docs:latest"
+          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+        run: |
+          DOCS_IMAGE_TAG=$(echo "${DOCS_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
+
+          helm dependency build
+
+          echo "Deploying $DOCS"
+
+          if ! helm status $DOCS > /dev/null 2>&1; then
+            helm install $DOCS . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set docs.image=$DOCS_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+          else
+            helm upgrade $DOCS . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set docs.image=$DOCS_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+          fi

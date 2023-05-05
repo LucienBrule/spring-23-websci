@@ -9,7 +9,7 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        lab: ['lab-3']
+        lab: [lab-3']
     steps:
       - name: Checkout repository
         uses: actions/checkout@v2
@@ -42,6 +42,9 @@ jobs:
           helm dependency build
 
           echo "Deploying $LAB_NAME with API image tag $API_IMAGE_TAG and Web image tag $WEB_IMAGE_TAG"
+          if [ "$LAB_NAME" == "docs" ]; then
+            API_IMAGE_TAG=""
+          fi
 
           if ! helm status $LAB_NAME > /dev/null 2>&1; then
             helm install $LAB_NAME . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
