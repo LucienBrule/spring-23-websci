@@ -1,1 +1,2 @@
-host: lab-3-websci.apps.prod.brule.io
+ingress:
+  host: lab-3-websci.apps.prod.brule.io
