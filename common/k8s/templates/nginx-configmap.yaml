@@ -12,7 +12,7 @@ data:
         listen 8080;
 
         # Bind to address and localhost
-        server_name _;
+        server_name _ localhost;
 
         # set application root
         root /opt/app-root/src;
