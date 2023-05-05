@@ -21,6 +21,13 @@ spec:
           image: {{.Values.web.image}}
           ports:
             - containerPort: 8080
+          volumeMounts:
+            - mountPath: /etc/nginx/modules/http/app.conf
+              name: nginx-config
+              subPath: app.conf
+            - mountPath: /etc/nginx/nginx.conf
+              name: nginx-config
+              subPath: nginx.conf
           env:
             - name: NODE_ENV
               value: production
@@ -36,3 +43,7 @@ spec:
                 - ALL
             seccompProfile:
               type: RuntimeDefault
+      volumes:
+        - name: nginx-config
+          configMap:
+            name: nginx-config

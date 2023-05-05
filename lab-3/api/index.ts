@@ -65,7 +65,7 @@ app.get("/api/completion?prompt=:prompt",async (req: Request, res: Response) => 
 app.get("/api/v1/health", (req: Request, res: Response) => {
 
     console.log("GET api/v1/health")
-    
+
     return res.json({
         status: "OK",
         uptime: process.uptime(),

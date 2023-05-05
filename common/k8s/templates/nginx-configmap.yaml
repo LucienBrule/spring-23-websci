@@ -1,0 +1,68 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: nginx-config
+data:
+  app.conf: |
+    server {
+        # log to stdout
+        access_log /dev/stdout;
+
+        # listen on assigned port from env
+        listen 8080;
+
+        # Bind to address and localhost
+        server_name _;
+
+        # set application root
+        root /opt/app-root/src;
+
+        # set index
+        index index.html;
+
+        # no ports in redirect
+        port_in_redirect off;
+
+        # /portal location block
+        location / {
+            try_files $uri $uri/ /index.html =404;
+        }
+
+    }
+
+    proxy_buffering off;
+  nginx.conf: |
+    # For more information on configuration, see:
+    #   * Official English Documentation: https://nginx.org/en/docs/
+    worker_processes auto;
+    error_log /dev/stdout info;
+    pid /run/nginx.pid;
+
+    # Load dynamic modules. See /usr/share/doc/nginx/README.dynamic.
+    include /etc/nginx/modules/root/*.conf;
+    events {
+      worker_connections 1024;
+    }
+
+    http {
+      access_log /dev/stdout;
+      log_format  main  '$remote_addr - $remote_user [$time_local] "$request" '
+          '$status $body_bytes_sent "$http_referer" '
+          '"$http_user_agent" "$http_x_forwarded_for"';
+
+
+      sendfile            on;
+      tcp_nopush          on;
+      tcp_nodelay         on;
+      keepalive_timeout   65;
+      types_hash_max_size 2048;
+
+      include             /etc/nginx/mime.types;
+      default_type        application/octet-stream;
+
+      # Load modular configuration files from the /etc/nginx/conf.d directory.
+      # See https://nginx.org/en/docs/ngx_core_module.html#include
+      # for more information.
+      include /etc/nginx/modules/http/*.conf;
+    }
+
