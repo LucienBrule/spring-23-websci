@@ -7,8 +7,8 @@ const darkCodeTheme = require('prism-react-renderer/themes/dracula');
 /** @type {import('@docusaurus/types').Config} */
 const config = {
   title: 'WebSci',
-  tagline: 'coursework for WebSci class',
-  url: 'https://your-docusaurus-test-site.com',
+  tagline: 'RPI Web Science',
+  url: 'https://websci.prod.brule.io',
   baseUrl: '/',
   onBrokenLinks: 'throw',
   onBrokenMarkdownLinks: 'warn',
@@ -16,8 +16,8 @@ const config = {
 
   // GitHub pages deployment config.
   // If you aren't using GitHub pages, you don't need these.
-  organizationName: 'rpi.edu', // Usually your GitHub org/user name.
-  projectName: 'WebSci', // Usually your repo name.
+  organizationName: 'LucienBrule', // Usually your GitHub org/user name.
+  projectName: 'spring-23-websci', // Usually your repo name.
 
   // Even if you don't use internalization, you can use this field to set useful
   // metadata like html lang. For example, if your site is Chinese, you may want

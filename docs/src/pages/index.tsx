@@ -30,7 +30,7 @@ export default function Home(): JSX.Element {
   return (
     <Layout
       title={`${siteConfig.title}`}
-      description="An WebSci course repo">
+      description="A WebScience course repo">
       <HomepageHeader />
       <main>
           <Splash />

@@ -6,7 +6,7 @@ function Splash(){
         <div>
             <img
                 className={"splash"}
-                src={useBaseUrl('/img/logo.png')}
+                src={useBaseUrl('/img/sisman.jpeg')}
                 alt="WebSci"
             />
         </div>
