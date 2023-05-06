@@ -1,3 +1,5 @@
-app:
-  api_enabled: false
-  web_enabled: true
+web:
+  image: ghcr.io/lucienbrule/spring-23-websci/lab-2-web:latest
+  enabled: true
+api:
+  enabled: false

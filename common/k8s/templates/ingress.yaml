@@ -12,7 +12,7 @@ spec:
     - host: {{.Values.global.ingressHost}}
       http:
         paths:
-          {{- if .Values.web.image}}
+          {{- if .Values.web.enabled }}
           - backend:
               service:
                 name: {{.Release.Name}}-web
@@ -21,7 +21,7 @@ spec:
             path: {{- if eq .Values.global.alias "docs" }}/{{- else }}/labs/{{ .Values.global.alias }}{{- end }}
             pathType: Prefix
           {{- end }}
-          {{- if .Values.api.image }}
+          {{- if .Values.api.enabled}}
           - backend:
               service:
                 name: {{.Release.Name}}-api

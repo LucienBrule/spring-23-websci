@@ -1,4 +1,4 @@
-{{- if .Values.app.api_enabled -}}
+{{- if .Values.api.enabled -}}
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:

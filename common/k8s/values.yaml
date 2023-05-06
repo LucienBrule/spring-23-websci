@@ -7,13 +7,9 @@ global:
   ingressHost: websci.apps.prod.brule.io
   imagePullSecret: regcred
 
-# App is overriden by each app's values.yaml
-app:
-  api_enabled: true
-  web_enabled: true
-
-# The following are overriden by the image tag injected by the deployment script
 web:
-  image: ${global.imageRepositoryHost}/${global.githubUsername}/${global.gitRepositoryName}/web
+  image: OVERRIDE_ME
+  enabled: false
 api:
-  image: ${global.imageRepositoryHost}/${global.githubUsername}/${global.gitRepositoryName}/api
+  image: OVERRIDE_ME
+  enabled: false
