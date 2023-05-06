@@ -1,4 +1,4 @@
-{{- if .Values.web.image}}
+{{- if has "web" .Values }}
 apiVersion: v1
 kind: ConfigMap
 metadata:

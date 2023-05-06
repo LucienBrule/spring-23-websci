@@ -1,4 +1,4 @@
-{{- if .Values.api.image }}
+{{- if has "api" .Values }}
 
 apiVersion: v1
 kind: Service
