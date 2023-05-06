@@ -1,3 +1,4 @@
+{{- if or .Values.global.web.enabled .Values.global.api.enabled}}
 kind: Ingress
 apiVersion: networking.k8s.io/v1
 metadata:
@@ -12,7 +13,7 @@ spec:
     - host: {{.Values.global.ingressHost}}
       http:
         paths:
-          {{- if .Values.web.enabled }}
+          {{- if .Values.global.web.enabled }}
           - backend:
               service:
                 name: {{.Release.Name}}-web
@@ -21,7 +22,7 @@ spec:
             path: {{- if eq .Values.global.alias "docs" }}/{{- else }}/labs/{{ .Values.global.alias }}{{- end }}
             pathType: Prefix
           {{- end }}
-          {{- if .Values.api.enabled}}
+          {{- if .Values.global.api.enabled}}
           - backend:
               service:
                 name: {{.Release.Name}}-api
@@ -30,3 +31,4 @@ spec:
             path: /labs/{{ .Values.global.alias }}/api/v1
             pathType: Prefix
           {{- end }}
+{{- end -}}

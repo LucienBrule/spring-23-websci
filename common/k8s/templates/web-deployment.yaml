@@ -1,4 +1,4 @@
-{{- if .Values.web.enabled -}}
+{{- if .Values.global.web.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -19,7 +19,7 @@ spec:
         - name: {{.Values.global.imagePullSecret}}
       containers:
         - name: {{.Release.Name}}-web
-          image: {{.Values.web.image}}
+          image: {{.Values.global.web.image}}
           ports:
             - containerPort: 8080
           volumeMounts:

@@ -1,4 +1,4 @@
-{{- if .Values.web.enabled -}}
+{{- if .Values.global.web.enabled -}}
 
 apiVersion: image.openshift.io/v1
 kind: ImageStream
@@ -13,5 +13,5 @@ spec:
     - name: latest
       from:
         kind: DockerImage
-        name: {{.Values.web.image}}
+        name: {{.Values.global.web.image}}
 {{- end -}}

@@ -1,4 +1,4 @@
-{{- if .Values.api.enabled -}}
+{{- if .Values.global.api.enabled -}}
 apiVersion: image.openshift.io/v1
 kind: ImageStream
 metadata:
@@ -10,5 +10,5 @@ spec:
     - name: latest
       from:
         kind: DockerImage
-        name: {{.Values.api.image}}
+        name: {{.Values.global.api.image}}
 {{- end -}}

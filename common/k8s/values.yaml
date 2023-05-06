@@ -7,9 +7,10 @@ global:
   ingressHost: websci.apps.prod.brule.io
   imagePullSecret: regcred
 
-web:
-  image: OVERRIDE_ME
-  enabled: false
-api:
-  image: OVERRIDE_ME
-  enabled: false
+  # The following are overriden by the image tag injected by the deployment script
+  web:
+    image: OVERRIDE_ME
+    enabled: false
+  api:
+    image: OVERRIDE_ME
+    enabled: false

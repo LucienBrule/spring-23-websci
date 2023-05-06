@@ -14,7 +14,7 @@ services:
     depends_on:
       - api
       - web
-  api:
+    api:
     container_name: api
     image: websci/api:latest
     build:

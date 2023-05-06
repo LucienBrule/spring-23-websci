@@ -1,4 +1,4 @@
-{{- if .Values.api.enabled -}}
+{{- if .Values.global.api.enabled -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -25,7 +25,7 @@ spec:
         - name: {{.Values.global.imagePullSecret}}
       containers:
         - name: {{.Release.Name}}-api
-          image: {{.Values.api.image}}
+          image: {{.Values.global.api.image}}
           imagePullPolicy: Always
           ports:
             - containerPort: 8080
