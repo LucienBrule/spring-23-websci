@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ConfigMap
 metadata:
-  name: nginx-config
+  name: {{.Release.Name}}-nginx-config
 data:
   app.conf: |
     server {
