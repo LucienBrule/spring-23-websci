@@ -1,4 +1,4 @@
-{{- if has "web.image" .Values }}
+{{- if has "web.image" .Values -}}
 
 apiVersion: v1
 kind: Service
@@ -14,4 +14,4 @@ spec:
   selector:
     app: {{ .Release.Name }}-web
   type: ClusterIP
-{{- end }}
+{{- end -}}

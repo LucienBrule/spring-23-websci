@@ -1,4 +1,4 @@
-{{- if has "web.image" .Values }}
+{{- if has "web.image" .Values -}}
 
 apiVersion: image.openshift.io/v1
 kind: ImageStream
@@ -14,4 +14,4 @@ spec:
       from:
         kind: DockerImage
         name: {{.Values.web.image}}
-{{- end }}
+{{- end -}}

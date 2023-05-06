@@ -1,4 +1,4 @@
-{{- if has "web.image" .Values }}
+{{- if has "web.image" .Values -}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -48,4 +48,4 @@ spec:
         - name: nginx-config
           configMap:
             name: nginx-config
-{{- end }}
+{{- end -}}

@@ -1,4 +1,4 @@
-{{- if has "api.image" .Values }}
+{{- if has "api.image" .Values -}}
 
 apiVersion: apps/v1
 kind: Deployment
@@ -42,4 +42,4 @@ spec:
             capabilities:
               drop:
                 - ALL
-{{- end }}
+{{- end -}}
