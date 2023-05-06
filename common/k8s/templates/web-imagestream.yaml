@@ -14,4 +14,4 @@ spec:
       from:
         kind: DockerImage
         name: {{.Values.web.image}}
-{{-end}}
+{{- end }}

@@ -66,4 +66,4 @@ data:
       # for more information.
       include /etc/nginx/modules/http/*.conf;
     }
-{{-end}}
+{{- end }}

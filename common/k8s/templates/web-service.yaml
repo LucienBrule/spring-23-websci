@@ -14,4 +14,4 @@ spec:
   selector:
     app: {{ .Release.Name }}-web
   type: ClusterIP
-{{-end}}
+{{- end }}
