@@ -1,0 +1,3 @@
+app:
+  api_enabled: true
+  web_enabled: true

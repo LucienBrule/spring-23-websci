@@ -1,6 +1,4 @@
-{{- include "common.helpers" . -}}
-{{- if has "web.image" .Values -}}
-
+{{- if .Values.app.web_enabled -}}
 apiVersion: v1
 kind: Service
 metadata:
