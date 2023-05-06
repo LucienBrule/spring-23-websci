@@ -9,20 +9,24 @@ metadata:
 spec:
   ingressClassName: openshift-default
   rules:
-    - host: {{.Release.Name}}.apps.{{.Values.global.domainName}}
+    - host: {{.Values.global.ingressHost}}
       http:
         paths:
+          {{- if .Values.web.image}}
           - backend:
               service:
                 name: {{.Release.Name}}-web
                 port:
                   number: 8080
-            path: /
-            pathType: ImplementationSpecific
+            path: {{- if eq .Values.global.alias "docs" }}/{{- else }}/labs/{{ .Values.global.alias }}{{- end }}
+            pathType: Prefix
+          {{- end }}
+          {{- if .Values.api.image }}
           - backend:
               service:
                 name: {{.Release.Name}}-api
                 port:
                   number: 8080
-            path: /api/v1
+            path: /labs/{{ .Values.global.alias }}/api/v1
             pathType: Prefix
+          {{- end }}

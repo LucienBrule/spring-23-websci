@@ -1,3 +1,4 @@
+{{- if Values.web.image}}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
@@ -47,3 +48,4 @@ spec:
         - name: nginx-config
           configMap:
             name: nginx-config
+{{-end}}

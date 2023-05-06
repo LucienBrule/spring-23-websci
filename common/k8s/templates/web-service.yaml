@@ -1,3 +1,5 @@
+{{- if Values.web.image}}
+
 apiVersion: v1
 kind: Service
 metadata:
@@ -12,3 +14,4 @@ spec:
   selector:
     app: {{ .Release.Name }}-web
   type: ClusterIP
+{{-end}}

@@ -4,17 +4,13 @@ global:
   githubUsername: lucienbrule
   imageRepositoryHost: ghcr.io
   domainName: prod.brule.io
+  ingressHost: websci.apps.prod.brule.io
   imagePullSecret: regcred
 
-api:
-  image: ghcr.io/lucienbrule/spring-23-websci/lab-3-api:latest
-web:
-  image: ghcr.io/lucienbrule/spring-23-websci/lab-3-web:latest
 
-common:
-  api:
-    baseImage:
-      name: registry.access.redhat.com/ubi8/nodejs-16:latest
-  client:
-    baseImage:
-      name: registry.access.redhat.com/ubi8/nodejs-16:latest
+# The following values are injected by Helm
+# Do not edit them here.
+# api:
+#   image: ghcr.io/lucienbrule/lab-N-api:latest
+# web:
+#   image: ghcr.io/lucienbrule/lab-N-web:latest

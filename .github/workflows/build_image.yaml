@@ -1,0 +1,52 @@
+name: Build Image and Push
+
+on:
+  workflow_dispatch:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      packages: write
+    strategy:
+      matrix:
+        lab: ['lab-3','docs']
+        component: ['api', 'web']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
+
+      - name: Login to GitHub Container Registry
+        uses: docker/login-action@v1
+        with:
+          registry: ghcr.io
+          username: ${{ github.actor }}
+          password: ${{ secrets.GHCR_PAT }}
+
+      - name: Check if component directory exists
+        id: check_component_dir
+        run: |
+          if [ -d "${{ matrix.lab }}/${{ matrix.component }}" ]; then
+            echo "::set-output name=exists::true"
+          else
+            echo "::set-output name=exists::false"
+          fi
+
+      - name: Build and push Docker image
+        if: steps.check_component_dir.outputs.exists == 'true'
+        working-directory: ${{ matrix.lab }}/${{ matrix.component }}
+        env:
+          LAB_NAME: ${{ matrix.lab }}
+          IMAGE_TAG: "ghcr.io/${{ github.repository }}/${{ matrix.lab }}-${{ matrix.component }}"
+          IMAGE_TAG_SHA: "${{ github.sha }}"
+        run: |
+          echo "Building $LAB_NAME ${{ matrix.component }} image with tag $IMAGE_TAG"
+          echo "ImageTagSha: $IMAGE_TAG_SHA"
+
+          IMAGE_TAG_SHA=$(echo "${IMAGE_TAG}:${IMAGE_TAG_SHA}" | tr '[:upper:]' '[:lower:]')
+          IMAGE_TAG_LATEST=$(echo "${IMAGE_TAG}:latest" | tr '[:upper:]' '[:lower:]')
+          docker build -t $IMAGE_TAG_SHA -f prod.Dockerfile .
+          docker push $IMAGE_TAG_SHA
+          docker tag $IMAGE_TAG_SHA $IMAGE_TAG_LATEST
+          docker push $IMAGE_TAG_LATEST
