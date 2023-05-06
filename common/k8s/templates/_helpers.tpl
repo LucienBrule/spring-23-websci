@@ -17,3 +17,18 @@ https://{{ .Values.global.gitRepositoryHost }}/{{ .Values.global.githubUsername 
 {{- define "chart.api.image.url" -}}
 {{ .Values.global.imageRepositoryHost }}/{{ .Values.global.githubUsername }}/{{ .Values.global.gitRepositoryName | lower }}/{{ .Values.global.alias }}-api:{{ .Values.global.githubSHA }}
 {{- end -}}
+
+{{/*
+Check if a value exists in the YAML.
+Usage: `{{- if has "key1.key2.key3" .Values }}`
+*/}}
+{{- define "has" -}}
+{{- $keys := splitList "." . -}}
+{{- $val := .Values -}}
+{{- range $keys -}}
+    {{- if not (hasKey $val .) -}}
+        {{- errorf "unable to find key %q in %v" . $val -}}
+    {{- end -}}
+    {{- $val = index $val $ -}}
+{{- end -}}
+{{- end -}}

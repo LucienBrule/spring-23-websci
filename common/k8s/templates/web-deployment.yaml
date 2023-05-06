@@ -1,4 +1,4 @@
-{{- if has "web" .Values }}
+{{- if has "web.image" .Values }}
 apiVersion: apps/v1
 kind: Deployment
 metadata:
