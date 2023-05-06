@@ -1,4 +1,4 @@
-{{- if Values.web.image}}
+{{- if .Values.web.image}}
 
 apiVersion: image.openshift.io/v1
 kind: ImageStream

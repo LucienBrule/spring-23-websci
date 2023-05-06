@@ -1,4 +1,4 @@
-{{- if Values.web.image}}
+{{- if .Values.web.image}}
 
 apiVersion: v1
 kind: Service
