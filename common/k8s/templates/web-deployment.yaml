@@ -1,5 +1,3 @@
-{{- include "common.helpers" . -}}
-
 {{- if has "web.image" .Values -}}
 apiVersion: apps/v1
 kind: Deployment
