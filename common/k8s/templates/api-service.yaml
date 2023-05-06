@@ -1,3 +1,5 @@
+{{- include "common.helpers" . -}}
+
 {{- if has "api.image" .Values -}}
 
 apiVersion: v1

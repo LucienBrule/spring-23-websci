@@ -1,3 +1,4 @@
+{{- include "common.helpers" . -}}
 {{- if has "web.image" .Values -}}
 
 apiVersion: image.openshift.io/v1

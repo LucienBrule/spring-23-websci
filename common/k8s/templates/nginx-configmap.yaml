@@ -1,3 +1,5 @@
+{{- include "common.helpers" . -}}
+
 {{- if has "web.image" .Values -}}
 apiVersion: v1
 kind: ConfigMap
