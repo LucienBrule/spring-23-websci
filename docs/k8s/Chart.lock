@@ -1,0 +1,6 @@
+dependencies:
+- name: common
+  repository: file://../../common/k8s
+  version: 0.1.0
+digest: sha256:240533b282ab9a489144d75c9d87182f181ad18aa5c67e6d8b6b2be3cb037eeb
+generated: "2023-05-06T12:55:19.961211-04:00"

@@ -1,5 +1,6 @@
-web:
-  image: ghcr.io/lucienbrule/spring-23-websci/docs-web:latest
-  enabled: true
-api:
-  enabled: false
+global:
+  web:
+    image: ghcr.io/lucienbrule/spring-23-websci/docs-web:latest
+    enabled: true
+  api:
+    enabled: false
