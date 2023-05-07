@@ -1,60 +1,107 @@
 name: Deploy Selected Labs to OpenShift
 
 on:
+  workflow_run:
+    workflows: ["Build Image and Push"]
+    branches: [main]
+    types:
+      - completed
   workflow_dispatch:
 
 jobs:
-  deploy:
-    runs-on: ubuntu-latest
-    strategy:
-      matrix:
-        lab: ['lab-3','docs']
-        component: ['api', 'web']
+   deploy_api:
+     runs-on: ubuntu-latest
+     strategy:
+       matrix:
+         lab: ['lab-3', 'docs']
+     steps:
+       - name: Checkout repository
+         uses: actions/checkout@v2
 
-    steps:
-      - name: Checkout repository
-        uses: actions/checkout@v2
+       - name: Check if api directory exists
+         id: check_api_dir
+         run: |
+           if [ -d "${{ matrix.lab }}/api" ]; then
+             echo "::set-output name=exists::true"
+           else
+             echo "::set-output name=exists::false"
+           fi
 
-      - name: Login to OpenShift Cluster
-        id: login-to-openshift
-        env:
-          OPENSHIFT_API_URL: ${{ secrets.OPENSHIFT_API_URL }}
-          SERVICE_ACCOUNT_TOKEN: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
-        run: |
-          oc login $OPENSHIFT_API_URL --token=$SERVICE_ACCOUNT_TOKEN --insecure-skip-tls-verify
+       - name: Login to OpenShift Cluster
+         if: steps.check_api_dir.outputs.exists == 'true'
+         id: login-to-openshift
+         env:
+           OPENSHIFT_API_URL: ${{ secrets.OPENSHIFT_API_URL }}
+           SERVICE_ACCOUNT_TOKEN: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
+         run: |
+           oc login $OPENSHIFT_API_URL --token=$SERVICE_ACCOUNT_TOKEN --insecure-skip-tls-verify
 
-      - name: Set OpenShift Project
-        env:
-          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
-        run: |
-          oc project $OPENSHIFT_NAMESPACE
+       - name: Set OpenShift Project
+         if: steps.check_api_dir.outputs.exists == 'true'
+         env:
+           OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+         run: |
+           oc project $OPENSHIFT_NAMESPACE
 
-      - name: Check if api directory exists
-        id: check_api_dir
-        run: |
-          if [ -d "${{ matrix.lab }}/api" ]; then
-            echo "::set-output name=exists::true"
-          else
-            echo "::set-output name=exists::false"
-          fi
+       - name: Deploy Helm chart
+         if: steps.check_api_dir.outputs.exists == 'true'
+         working-directory: ${{ matrix.lab }}/k8s
+         env:
+           LAB_NAME: ${{ matrix.lab }}
+           API_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-api:latest"
+           OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+         run: |
+           API_IMAGE_TAG=$(echo "${API_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
 
-      - name: Deploy Helm chart
-        working-directory: ${{ matrix.lab }}/k8s
-        env:
-          LAB_NAME: ${{ matrix.lab }}
-          API_IMAGE_TAG: ${{ steps.check_api_dir.outputs.exists == 'true' && format('ghcr.io/{0}/{1}-api:latest', github.repository, matrix.lab) || '' }}
-          WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest"
-          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
-        run: |
-          API_IMAGE_TAG=$(echo "${API_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
-          WEB_IMAGE_TAG=$(echo "${WEB_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
+           helm dependency build
 
-          helm dependency build
+           echo "Deploying $LAB_NAME API with image tag $API_IMAGE_TAG"
 
-          echo "Deploying $LAB_NAME with API image tag $API_IMAGE_TAG and Web image tag $WEB_IMAGE_TAG"
+           if ! helm status $LAB_NAME > /dev/null 2>&1; then
+             helm install $LAB_NAME . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+           else
+             helm upgrade $LAB_NAME . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+           fi
+     deploy_web:
+       runs-on: ubuntu-latest
+       needs: [deploy_api]
+       strategy:
+         matrix:
+           lab: ['lab-3', 'docs']
+       steps:
+         - name: Checkout repository
+           uses: actions/checkout@v2
 
-          if ! helm status $LAB_NAME > /dev/null 2>&1; then
-            helm install $LAB_NAME . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
-          else
-            helm upgrade $LAB_NAME . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
-          fi
+         - name: Login to OpenShift Cluster
+           id: login-to-openshift
+           env:
+             OPENSHIFT_API_URL: ${{ secrets.OPENSHIFT_API_URL }}
+             SERVICE_ACCOUNT_TOKEN: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
+           run: |
+             oc login $OPENSHIFT_API_URL --token=$SERVICE_ACCOUNT_TOKEN --insecure-skip-tls-verify
+
+         - name: Set OpenShift Project
+           env:
+             OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+           run: |
+             oc project $OPENSHIFT_NAMESPACE
+
+         - name: Deploy Helm chart
+           working-directory: ${{ matrix.lab }}/k8s
+           env:
+             LAB_NAME: ${{ matrix.lab }}
+             WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest"
+             OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+           run: |
+             WEB_IMAGE_TAG=$(echo "${WEB_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
+
+             helm dependency build
+
+             echo "Deploying $LAB_NAME Web with image tag $WEB_IMAGE_TAG"
+
+             if ! helm status $LAB_NAME > /dev/null 2>&1; then
+               helm install $LAB_NAME . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+             else
+               helm upgrade $LAB_NAME . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+             fi
+
