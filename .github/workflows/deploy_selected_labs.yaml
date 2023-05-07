@@ -63,45 +63,45 @@ jobs:
             helm upgrade $LAB_NAME . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set api.image=$API_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
           fi
 
-deploy_web:
-  runs-on: ubuntu-latest
-  needs: [deploy_api]
-  strategy:
-    matrix:
-      lab: ['lab-3', 'docs']
-  steps:
-    - name: Checkout repository
-      uses: actions/checkout@v2
+  deploy_web:
+    runs-on: ubuntu-latest
+    needs: [deploy_api]
+    strategy:
+      matrix:
+        lab: ['lab-3', 'docs']
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v2
 
-    - name: Login to OpenShift Cluster
-      id: login-to-openshift
-      env:
-        OPENSHIFT_API_URL: ${{ secrets.OPENSHIFT_API_URL }}
-        SERVICE_ACCOUNT_TOKEN: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
-      run: |
-        oc login $OPENSHIFT_API_URL --token=$SERVICE_ACCOUNT_TOKEN --insecure-skip-tls-verify
+      - name: Login to OpenShift Cluster
+        id: login-to-openshift
+        env:
+          OPENSHIFT_API_URL: ${{ secrets.OPENSHIFT_API_URL }}
+          SERVICE_ACCOUNT_TOKEN: ${{ secrets.SERVICE_ACCOUNT_TOKEN }}
+        run: |
+          oc login $OPENSHIFT_API_URL --token=$SERVICE_ACCOUNT_TOKEN --insecure-skip-tls-verify
 
-    - name: Set OpenShift Project
-      env:
-        OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
-      run: |
-        oc project $OPENSHIFT_NAMESPACE
+      - name: Set OpenShift Project
+        env:
+          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+        run: |
+          oc project $OPENSHIFT_NAMESPACE
 
-    - name: Deploy Helm chart
-      working-directory: ${{ matrix.lab }}/k8s
-      env:
-        LAB_NAME: ${{ matrix.lab }}
-        WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest"
-        OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
-      run: |
-        WEB_IMAGE_TAG=$(echo "${WEB_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
+      - name: Deploy Helm chart
+        working-directory: ${{ matrix.lab }}/k8s
+        env:
+          LAB_NAME: ${{ matrix.lab }}
+          WEB_IMAGE_TAG: "ghcr.io/${{ github.repository}}/${{matrix.lab}}-web:latest"
+          OPENSHIFT_NAMESPACE: ${{ secrets.OPENSHIFT_NAMESPACE }}
+        run: |
+          WEB_IMAGE_TAG=$(echo "${WEB_IMAGE_TAG}" | tr '[:upper:]' '[:lower:]')
 
-        helm dependency build
+          helm dependency build
 
-        echo "Deploying $LAB_NAME Web with image tag $WEB_IMAGE_TAG"
+          echo "Deploying $LAB_NAME Web with image tag $WEB_IMAGE_TAG"
 
-        if ! helm status $LAB_NAME > /dev/null 2>&1; then
-          helm install $LAB_NAME . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
-        else
-          helm upgrade $LAB_NAME . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
-        fi
+          if ! helm status $LAB_NAME > /dev/null 2>&1; then
+            helm install $LAB_NAME . --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+          else
+            helm upgrade $LAB_NAME . --install --namespace $OPENSHIFT_NAMESPACE -f ../../common/k8s/values.yaml -f values.yaml --set web.image=$WEB_IMAGE_TAG --set global.githubSHA=${{ github.event.workflow_run.head_sha }} --set global.alias=${{ matrix.lab }}
+          fi
