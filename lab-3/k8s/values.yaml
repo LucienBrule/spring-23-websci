@@ -6,4 +6,4 @@ global:
   api:
     image: ghcr.io/lucienbrule/spring-23-websci/lab-3-api:latest
     enabled: true
-    baseUrl: /labs/lab-3/api/v1/
+    baseUrl: /api/v1/
