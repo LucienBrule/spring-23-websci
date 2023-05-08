@@ -23,6 +23,8 @@ spec:
             pathType: Prefix
 {{- end }}
 
+---
+
 {{- if .Values.global.api.enabled }}
 kind: Ingress
 apiVersion: networking.k8s.io/v1
