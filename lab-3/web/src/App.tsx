@@ -23,7 +23,7 @@ function App() {
         console.error('Error checking backend health:', error)
         setHealth('error')
       })
-    })
+    }, 5000)
 
     return () => {
       clearInterval(periodicHealthCheck)
