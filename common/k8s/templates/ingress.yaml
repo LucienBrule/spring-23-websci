@@ -19,7 +19,7 @@ spec:
                 name: {{.Release.Name}}-web
                 port:
                   number: 8080
-            path: '{{- if eq .Values.global.alias "docs" }}/{{- else }}/labs/{{ .Values.global.alias }}{{- end }}'
+            path: '{{- if eq .Values.global.alias "docs" }}/{{- else }}/labs/{{ .Values.global.alias }}/{{- end }}'
             pathType: Prefix
 {{- end }}
 
@@ -34,7 +34,7 @@ metadata:
     app: {{.Release.Name}}
   annotations:
     route.openshift.io/termination: "edge"
-    haproxy.router.openshift.io/rewrite-target: /api/v1
+    haproxy.router.openshift.io/rewrite-target: /api/v1/
 spec:
   ingressClassName: openshift-default
   rules:
@@ -46,6 +46,6 @@ spec:
                 name: {{.Release.Name}}-api
                 port:
                   number: 8080
-            path: /labs/{{ .Values.global.alias }}/api/v1
+            path: /labs/{{ .Values.global.alias }}/api/v1/
             pathType: Prefix
 {{- end }}
