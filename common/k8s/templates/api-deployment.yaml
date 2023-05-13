@@ -36,6 +36,8 @@ spec:
               value: "8080"
             - name: BASE_URL
               value: {{.Values.global.api.baseUrl}}
+            - name: HOST
+              value: "0.0.0.0"
           command: [ "node" ]
           args: [ "/app/dist/index.js" ]
           securityContext:

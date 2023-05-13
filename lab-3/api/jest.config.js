@@ -3,4 +3,7 @@ module.exports = {
     testEnvironment: "node",
     testMatch: ["**/*.spec.ts"],
     collectCoverage: true,
+    moduleNameMapper: {
+        "^@/(.*)$": "<rootDir>/src/$1"
+    }
 }
