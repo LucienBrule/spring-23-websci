@@ -1,4 +1,4 @@
-import { IChatMessage } from "../../models/chat";
+import {IChatMessage} from "@/models/chat";
 
 interface IChatMessageQueue {
   addMessage(message: IChatMessage): void;
@@ -17,7 +17,6 @@ class MessageQueue implements IChatMessageQueue {
   }
 
   public addMessage(message: IChatMessage) {
-    console.log("Adding message to queue", message);
     this.messages.push(message);
   }
 
@@ -26,12 +25,10 @@ class MessageQueue implements IChatMessageQueue {
   }
 
   public getMessages(): IChatMessage[] {
-    console.log("Getting messages from queue")
     return this.messages;
   }
 
   public getMessage(id: string): IChatMessage | undefined {
-    console.log("Getting message from queue", id);
     return this.messages.find((message) => message.id === id);
   }
 

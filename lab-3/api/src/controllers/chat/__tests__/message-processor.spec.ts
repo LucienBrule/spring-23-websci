@@ -1,7 +1,7 @@
-import { MessageProcessor, IMessageProcessor } from '../message-processor';
-import { IRoomManager } from '../room-manager';
-import { IChatEventConnection } from '../chat-event-connection';
-import { ChatMessage } from '../../../models/chat';
+import {IMessageProcessor, MessageProcessor} from '../message-processor';
+import {IRoomManager} from '../room-manager';
+import {IChatEventConnection} from '../chat-event-connection';
+import {ChatMessage} from '@/models/chat';
 
 describe('MessageProcessor', () => {
   let messageProcessor: IMessageProcessor;

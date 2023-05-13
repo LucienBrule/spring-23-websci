@@ -1,13 +1,15 @@
-import { ChatService } from '../chat';
-import {ChatMessage, IChatMessage} from "../../../models/chat";
-import {ChatController, ChatEvents} from "../../../controllers/chat";
+import {ChatService} from '@/services/chat';
+import {ChatMessage, IChatMessage} from "@/models/chat";
+import {ChatController} from "@/controllers/chat";
+import {ChatEvents} from "@/models/events";
 
-
-jest.mock('../../../controllers/chat', () => {
+jest.mock('@/controllers/chat', () => {
   return {
     ChatController: {
-      getInstance: jest.fn().mockReturnValue({}),
-      ChatEvents: {},
+      getInstance: jest.fn().mockReturnValue({
+        emit: jest.fn(),
+        once: jest.fn(),
+      }),
     },
   };
 });

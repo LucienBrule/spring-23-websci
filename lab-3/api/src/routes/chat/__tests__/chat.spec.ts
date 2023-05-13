@@ -1,11 +1,11 @@
 import request from 'supertest';
 import express from 'express';
 import {chatRouter} from "../chat";
-import {ChatService} from "../../../services/chat";
-import {ChatEventService} from "../../../services/chat/chat-event-service";
-import {ChatMessage} from "../../../models/chat";
+import {ChatService} from "@/services";
+import {ChatEventService} from "@/services";
+import {ChatMessage} from "@/models/chat";
 
-jest.mock('../../../services/chat');
+jest.mock('@/services/chat')
 
 const app = express();
 app.use(express.json());

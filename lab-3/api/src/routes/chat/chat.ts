@@ -1,6 +1,6 @@
 import express, {NextFunction, Request, Response} from "express";
-import {ChatService} from "../../services/chat";
-import { ChatEventService } from '../../services/chat/chat-event-service';
+import {ChatService} from "@/services/chat";
+import {ChatEventService} from '@/services/chat/chat-event-service';
 
 const chatRouter = express.Router();
 const chatService = ChatService.getInstance();

@@ -1,4 +1,4 @@
-import { Response, Request, NextFunction} from "express";
+import {NextFunction, Request, Response} from "express";
 
 let errorHandler = (err: Error, req: Request, res: Response, next: NextFunction) => {
   console.log(err.message)

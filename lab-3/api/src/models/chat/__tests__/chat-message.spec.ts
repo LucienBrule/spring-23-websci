@@ -1,5 +1,5 @@
-import {ChatMessage} from "../chat-message";
 import {describe} from "node:test";
+import {ChatMessage} from "@/models/chat";
 
 describe('ChatMessage', () => {
   it('should create a new ChatMessage with generated ID', () => {

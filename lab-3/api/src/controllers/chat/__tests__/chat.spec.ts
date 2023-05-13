@@ -1,12 +1,25 @@
-import { ChatController, ChatEvents } from '../chat';
-import {MessageQueue} from "../message-queue";
-import {ChatMessage} from "../../../models/chat";
-import {ChatEventConnection} from "../chat-event-connection";
+
+import {ChatMessage} from "@/models/chat";
+import {ChatEventConnection} from "@/controllers/chat/chat-event-connection";
+import {ChatEvents} from "@/models/events";
+import {MessageQueue} from "@/controllers/chat/message-queue";
+import {ChatController} from "@/controllers/chat";
+import express from "express";
 
 jest.mock('../message-queue');
 jest.mock('../room-manager');
 jest.mock('../message-processor');
 jest.mock('../chat-event-connection');
+jest.mock('../chat-event-connection', () => ({
+  ChatEventConnection: {
+    getInstance: jest.fn(() => ({
+      sendMessage: jest.fn(),
+      // Add any other methods you want to mock here
+    })),
+  },
+}));
+
+
 
 describe('ChatController', () => {
   let chatController: ChatController;
@@ -99,6 +112,11 @@ describe('ChatController', () => {
   it('should process messages in the queue', (done) => {
     jest.spyOn(ChatEventConnection.prototype, 'sendMessage').mockImplementation();
 
+    console.log("The test is running...")
+
+    console.log('chatEventConnection instance:', chatController['chatEventConnection']);
+
+    chatController.emit(ChatEvents.startMessageProcessing);
     chatController.emit(ChatEvents.addMessage, message);
 
     setTimeout(() => {

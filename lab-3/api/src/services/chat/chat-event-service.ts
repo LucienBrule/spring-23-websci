@@ -1,12 +1,12 @@
-import { ChatEventConnection } from '../../controllers/chat/chat-event-connection';
-import { Response } from 'express';
+import {ChatEventConnection} from '@/controllers/chat/chat-event-connection';
+import {Response} from 'express';
 
 class ChatEventService {
   private static instance: ChatEventService;
   private chatEventConnection: ChatEventConnection;
 
   private constructor() {
-    this.chatEventConnection = new ChatEventConnection();
+    this.chatEventConnection = ChatEventConnection.getInstance();
   }
 
   public static getInstance(): ChatEventService {

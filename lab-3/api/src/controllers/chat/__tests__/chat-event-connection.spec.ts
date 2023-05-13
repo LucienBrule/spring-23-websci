@@ -1,4 +1,4 @@
-import { ChatEventConnection } from '../chat-event-connection';
+import {ChatEventConnection} from '@/controllers/chat';
 import express from 'express';
 
 describe('ChatEventConnection', () => {

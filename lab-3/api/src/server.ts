@@ -2,8 +2,8 @@ import express, {Express, Request, Response} from 'express';
 import config from "./config";
 import {router as APIV1Router} from "./routes";
 import listEndpoints from "express-list-endpoints";
-import {logAllRequests} from "./middleware/request-logger";
-import {errorHandler} from "./middleware/error-handler";
+import {logAllRequests} from "@/middleware/request-logger";
+import {errorHandler} from "@/middleware/error-handler";
 
 const app: Express = express();
 

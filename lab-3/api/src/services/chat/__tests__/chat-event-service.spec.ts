@@ -1,4 +1,4 @@
-import { ChatEventService } from "../chat-event-service";
+import {ChatEventService} from "../chat-event-service";
 
 type MockResponse = {
   write?: jest.Mock;

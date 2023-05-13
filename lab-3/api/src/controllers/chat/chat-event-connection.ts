@@ -1,4 +1,5 @@
 import express from "express";
+import assert from "assert";
 
 
 interface IChatEventConnection {
@@ -12,16 +13,18 @@ class ChatEventConnection implements IChatEventConnection{
   private clients: Map<string, express.Response>;
 
   public static instance: ChatEventConnection;
-  constructor() {
+  private constructor() {
     this.clients = new Map();
   }
 
   public static getInstance(): ChatEventConnection {
     if (!ChatEventConnection.instance) {
-      ChatEventConnection.instance = new ChatEventConnection();
+      ChatEventConnection.instance = new this();
     }
+    assert(ChatEventConnection.instance !== undefined, 'ChatEventConnection is not initialized')
     return ChatEventConnection.instance;
   }
+
 
   public addClient(clientId: string, res: express.Response) {
     this.clients.set(clientId, res);

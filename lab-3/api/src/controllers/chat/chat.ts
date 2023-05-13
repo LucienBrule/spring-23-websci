@@ -1,34 +1,12 @@
 import {EventEmitter} from "events";
-import {ChatMessage, IChatMessage} from "../../models/chat";
-import {MessageQueue, IChatMessageQueue} from './message-queue';
-import {RoomManager, IRoomManager} from './room-manager';
-import {MessageProcessor, IMessageProcessor} from './message-processor';
+import {IChatMessage} from "@/models/chat";
+import {IChatMessageQueue, MessageQueue} from './message-queue';
+import {IRoomManager, RoomManager} from './room-manager';
+import {IMessageProcessor, MessageProcessor} from './message-processor';
 import {ChatEventConnection, IChatEventConnection} from "./chat-event-connection";
+import {ChatEvents} from "@/models/events";
+import assert from "assert";
 
-
-enum ChatEvents {
-
-  // Request events
-  getMessages = "getMessages",
-  addMessage = "addMessage",
-  getMessage = "getMessage",
-  updateMessage = "updateMessage",
-  deleteMessage = "deleteMessage",
-
-  // Response events
-  getMessagesResponse = "getMessagesResponse",
-  addMessageResponse = "addMessageResponse",
-  getMessageResponse = "getMessageResponse",
-  updateMessageResponse = "updateMessageResponse",
-  deleteMessageResponse = "deleteMessageResponse",
-
-  // Error events
-  getMessagesError = "getMessagesError",
-  addMessageError = "addMessageError",
-  getMessageError = "getMessageError",
-  updateMessageError = "updateMessageError",
-  deleteMessageError = "deleteMessageError",
-}
 
 class ChatController extends EventEmitter{
 
@@ -37,6 +15,8 @@ class ChatController extends EventEmitter{
   private roomManager: IRoomManager;
   private messageProcessor: IMessageProcessor;
   private chatEventConnection: IChatEventConnection;
+  private processingInterval: NodeJS.Timeout | null = null;
+
 
   constructor() {
     super();
@@ -44,10 +24,11 @@ class ChatController extends EventEmitter{
     this.messageQueue = new MessageQueue();
     this.roomManager = new RoomManager();
     this.chatEventConnection = ChatEventConnection.getInstance()
+
+    assert(this.chatEventConnection !== undefined, 'ChatEventConnection is not initialized');
     this.messageProcessor = new MessageProcessor(this.roomManager, this.chatEventConnection);
 
     this.registerEvents();
-    this.startMessageProcessing();
   }
 
   public static getInstance(): ChatController {
@@ -63,16 +44,27 @@ class ChatController extends EventEmitter{
     this.on(ChatEvents.getMessage, this.handleGetMessage);
     this.on(ChatEvents.updateMessage, this.handleUpdateMessage);
     this.on(ChatEvents.deleteMessage, this.handleDeleteMessage);
+    this.on(ChatEvents.startMessageProcessing, this.startMessageProcessing);
+    this.on(ChatEvents.stopMessageProcessing, this.stopMessageProcessing);
   }
 
-  private startMessageProcessing() {
-    setInterval(() => {
+
+  private startMessageProcessing = () => {
+    this.processingInterval = setInterval(() => {
       const message = this.messageQueue.getNextMessage();
       if (message) {
         this.messageProcessor.process(message);
       }
     }, 1000);
-  }
+  };
+
+  private stopMessageProcessing = () => {
+    if (this.processingInterval) {
+      clearInterval(this.processingInterval);
+      this.processingInterval = null;
+    }
+  };
+
 
   private handleAddMessage = (message: IChatMessage) => {
     try{
@@ -85,10 +77,7 @@ class ChatController extends EventEmitter{
   private handleGetMessages = () => {
 
     try {
-      const messages = this.messageQueue.getMessages() || [];
-
-      console.log("Messages: " , messages)
-
+      const messages = this.messageQueue.getMessages();
       this.emit(ChatEvents.getMessagesResponse, messages);
     } catch (err) {
       this.emit(ChatEvents.getMessagesError, err);

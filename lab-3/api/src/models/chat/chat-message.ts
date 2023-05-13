@@ -1,4 +1,5 @@
 import {v4 as generateUUID} from 'uuid';
+
 interface IChatMessage {
   content: string;
   userId: string;

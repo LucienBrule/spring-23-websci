@@ -1,5 +1,7 @@
-import {ChatController, ChatEvents} from "../../controllers/chat";
-import {IChatMessage} from "../../models/chat";
+import {ChatController} from "@/controllers/chat";
+import {IChatMessage} from "@/models/chat";
+import {ChatEvents} from "@/models/events";
+
 
 interface IChatService {
   getMessages(): Promise<IChatMessage[]>;

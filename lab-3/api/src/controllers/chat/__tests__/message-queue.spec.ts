@@ -1,5 +1,5 @@
 import {MessageQueue} from "../message-queue";
-import {IChatMessage} from "../../../models/chat";
+import {IChatMessage} from "@/models/chat";
 
 
 describe('MessageQueue', () => {
