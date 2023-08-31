@@ -47,7 +47,7 @@ class ChatEventConnection implements IChatEventConnection{
     }
   }
 
-  getClientIds(): string[] {
+  public getClientIds(): string[] {
     return Array.from(this.clients.keys());
   }
 }

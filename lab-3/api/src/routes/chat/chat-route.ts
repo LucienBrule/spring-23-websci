@@ -1,6 +1,7 @@
 import express, {NextFunction, Request, Response} from "express";
 import {ChatService} from "@/services/chat";
 import {ChatEventService} from '@/services/chat/chat-event-service';
+import {IChatMessage} from "@/models/chat";
 
 const chatRouter = express.Router();
 const chatService = ChatService.getInstance();
@@ -22,11 +23,11 @@ chatRouter.get("/", async (req: Request, res: Response, next: NextFunction) => {
 /**
  * Create a message
  * @param message
- * @returns created message
+ * @returns created message following IChatMessage interface
  */
 chatRouter.post("/", async (req: Request, res: Response, next: NextFunction) => {
   try {
-    const message = await chatService.addMessage(req.body.message);
+    const message: IChatMessage = await chatService.addMessage(req.body.message);
     res.json(message);
   } catch (err) {
     next(err);

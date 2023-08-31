@@ -113,6 +113,5 @@ class ChatController extends EventEmitter{
 }
 
 export {
-  ChatEvents,
   ChatController
 }
